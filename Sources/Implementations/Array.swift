@@ -61,6 +61,7 @@ struct ArrayIterator<X>: IteratorProtocol {
     }
     
     mutating func next() -> X? {
+        _idx += 1
         return _idx < _elems.count ? _elems[_idx] : nil
     }
     

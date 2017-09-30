@@ -8,7 +8,19 @@
 protocol SeqFactory: Factory where Out: SeqProtocol, Out.Element == In { }
 
 extension SeqFactory {
-    static func fill(_ n: Int, _ f: (Int) -> In) -> Out {
+    
+    static func fill(_ n: Int, _ e: @autoclosure () -> In) -> Out {
+        var builder = newBuilder()
+        builder.sizeHint(n)
+        var i = 0;
+        while i < n {
+            builder.add(e())
+            i += 1
+        }
+        return builder.result()
+    }
+
+    static func tabulate(_ n: Int, _ f: (Int) -> In) -> Out {
         var builder = newBuilder()
         builder.sizeHint(n)
         var i = 0;
@@ -18,4 +30,5 @@ extension SeqFactory {
         }
         return builder.result()
     }
+    
 }

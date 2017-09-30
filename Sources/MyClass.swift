@@ -6,6 +6,4 @@
 //  Copyright © 2017 Yuhuan Jiang. All rights reserved.
 //
 
-public class MyClass {
-    
-}
+

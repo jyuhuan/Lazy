@@ -24,3 +24,24 @@ struct MappedIterator<T, U, TI: IteratorProtocol>: IteratorProtocol where TI.Ele
     }
     
 }
+
+struct IndexedIterator<OldIterator: IteratorProtocol>: IteratorProtocol {
+    
+    typealias Element = (Int, OldIterator.Element)
+    
+    var oldIter: OldIterator
+    var i: Int
+    
+    init(_ oldIter: OldIterator) {
+        self.oldIter = oldIter
+        i = -1
+    }
+    
+    mutating func next() -> (Int, OldIterator.Element)? {
+        let oldNext = oldIter.next();
+        if oldNext == nil { return nil }
+        i += 1
+        return (i, oldNext!)
+    }
+    
+}
