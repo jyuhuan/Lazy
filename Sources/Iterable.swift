@@ -28,11 +28,6 @@ extension IterableProtocol {
 struct IterableOf<Iterator: IteratorProtocol>: IterableProtocol {
     typealias Element = Iterator.Element
     var iterator: Iterator
-    init(_ iterator: Iterator) {
-        self.iterator = iterator
-    }
-    func makeIterator() -> Iterator {
-        return iterator
-    }
+    init(_ iterator: Iterator) { self.iterator = iterator }
+    func makeIterator() -> Iterator { return iterator }
 }
-
