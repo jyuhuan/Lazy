@@ -5,4 +5,4 @@
 
 # Lazy
 
-A description of this package.
+A library of generic lazy collections for Swift.
