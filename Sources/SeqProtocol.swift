@@ -7,8 +7,8 @@
 //
 
 protocol SeqProtocol: IterableProtocol, MapProtocol where Key == Int, Val == Element {
-    func head() -> Element?
-    func tail() -> Self
+    var head: Element? { get }
+    var tail: Self { get }
 }
 
 extension SeqProtocol {

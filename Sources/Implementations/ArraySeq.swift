@@ -1,12 +1,12 @@
 //
-//  Array.swift
+//  ArraySeq.swift
 //  SwiftCollection
 //
 //  Created by Yuhuan Jiang on 9/30/17.
 //  Copyright © 2017 Yuhuan Jiang. All rights reserved.
 //
 
-class ArraySeq<X>: RandomAccessSeqProtocol, SeqFactory {
+final class ArraySeq<X>: RandomAccessSeqProtocol, SeqFactory {
 
     typealias Element = X
     typealias Iterator = ArraySeqIterator<X>
@@ -25,12 +25,16 @@ class ArraySeq<X>: RandomAccessSeqProtocol, SeqFactory {
         return _elems[index]
     }
     
-    func head() -> X? {
-        return _elems[0]
+    var head: X? {
+        get {
+            return _elems[0]
+        }
     }
-    
-    func tail() -> Self {
-        return self;
+
+    var tail: ArraySeq<X> {
+        get {
+            return self;
+        }
     }
     
     var count: Int {
