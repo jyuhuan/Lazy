@@ -32,7 +32,6 @@
 		966754401F801F9900F2DD05 /* Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9667543F1F801F9900F2DD05 /* Factory.swift */; };
 		966754431F80205400F2DD05 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966754421F80205400F2DD05 /* Builder.swift */; };
 		966754451F802C1F00F2DD05 /* SeqFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966754441F802C1F00F2DD05 /* SeqFactory.swift */; };
-		OBJ_21 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_27 /* ArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* ArrayTests.swift */; };
 		OBJ_29 /* Lazy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Lazy::Lazy::Product" /* Lazy.framework */; };
 /* End PBXBuildFile section */
@@ -69,7 +68,6 @@
 		"Lazy::Lazy::Product" /* Lazy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Lazy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Lazy::LazyTests::Product" /* LazyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = LazyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_12 /* ArrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayTests.swift; sourceTree = "<group>"; };
-		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,7 +144,6 @@
 		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
-				OBJ_6 /* Package.swift */,
 				OBJ_7 /* Sources */,
 				OBJ_10 /* Tests */,
 				OBJ_13 /* Products */,
@@ -252,7 +249,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_21 /* Package.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
