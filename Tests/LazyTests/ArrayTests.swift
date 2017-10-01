@@ -3,36 +3,44 @@ import XCTest
 
 class ArrayTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func testCreateEmptyArray() {
         let arr = Lazy.Array<String>.empty()
-        XCTAssert(arr.count == 0)
+        assert(arr.count == 0)
+        for _ in arr.swiftSequence {
+            assert(false)  // Should never enter here
+        }
     }
     
     func testCreateArrayOutOfElements() {
-        let arr = Array.of(elements: "a", "b")
-        XCTAssert(arr.count == 2)
+        let arr = Lazy.Array.of(elements: "a", "b")
+        assert(arr.count == 2)
+        for (i, x) in arr.indexed.swiftSequence {
+            assert(x == arr[i])
+        }
     }
     
-    func testCreateArrayByFilling() {
+    func testCreateArrayByFillingPlainNumbers() {
         let arr = Array.fill(5, 8)
-        XCTAssert(arr.count == 5)
+        assert(arr.count == 5)
+    }
+
+    func testCreateArrayByFillingFunctionResults() {
+        var i = -1
+        func newNumber() -> Int {
+            i += 1
+            return i
+        }
+        let arr = Lazy.Array.fill(5, newNumber())
+        for (i, x) in arr.indexed.swiftSequence {
+            assert(x == i)
+        }
     }
     
     func testCreateArrayByTabulating() {
-        let arr = Array.tabulate(5){i in return i * 10}
-        XCTAssert(arr.count == 5)
-        for (i, x) in arr.indexed() {
-            XCTAssert(x == i * 10)
+        let arr = Lazy.Array.tabulate(5){i in return i * 10}
+        assert(arr.count == 5)
+        for (i, x) in arr.indexed.swiftSequence {
+            assert(x == i * 10)
         }
     }
     
