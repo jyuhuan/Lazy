@@ -24,7 +24,7 @@ class ArrayTests: XCTestCase {
         assert(arr.count == 5)
     }
 
-    func testCreateArrayByFillingFunctionResults() {
+    func testCreateArrayByFillingResultsFromAFunction() {
         var i = -1
         func newNumber() -> Int {
             i += 1
