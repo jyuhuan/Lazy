@@ -1,6 +1,7 @@
 language: swift
 osx_image: xcode9
 script:
+  - xcrun xcodebuild -project Lazy.xcodeproj
   - swift build
 after_success:
   - bash <(curl -s https://codecov.io/bash)
