@@ -22,6 +22,9 @@ class ArrayTests: XCTestCase {
     func testCreateArrayByFillingPlainNumbers() {
         let arr = Array.fill(5, 8)
         assert(arr.count == 5)
+        for x in arr.swiftSequence {
+            assert(x == 8)
+        }
     }
 
     func testCreateArrayByFillingResultsFromAFunction() {
