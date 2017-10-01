@@ -6,7 +6,11 @@
 //  Copyright © 2017 Yuhuan Jiang. All rights reserved.
 //
 
-protocol SeqProtocol: IterableProtocol {
+protocol SeqProtocol: IterableProtocol, MapProtocol where Key == Int, Val == Element {
     func head() -> Element?
     func tail() -> Self
+}
+
+extension SeqProtocol {
+
 }

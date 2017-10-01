@@ -6,13 +6,13 @@
 //  Copyright © 2017 Yuhuan Jiang. All rights reserved.
 //
 
-class Array<X>: RandomAccessSeqProtocol, SeqFactory {
-    
-    typealias Element = X
-    typealias Iterator = ArrayIterator<X>
+class ArraySeq<X>: RandomAccessSeqProtocol, SeqFactory {
 
-    func makeIterator() -> ArrayIterator<X> {
-        return ArrayIterator(_elems)
+    typealias Element = X
+    typealias Iterator = ArraySeqIterator<X>
+
+    func makeIterator() -> ArraySeqIterator<X> {
+        return ArraySeqIterator(_elems)
     }
     
     var _elems: Swift.Array<X>
@@ -21,11 +21,11 @@ class Array<X>: RandomAccessSeqProtocol, SeqFactory {
         _elems = elements
     }
     
-    func elementAt(index: Int) -> Array.Element {
+    func elementAt(index: Int) -> X? {
         return _elems[index]
     }
     
-    func head() -> Array.Element? {
+    func head() -> X? {
         return _elems[0]
     }
     
@@ -37,18 +37,22 @@ class Array<X>: RandomAccessSeqProtocol, SeqFactory {
         get { return _elems.count }
     }
     
+    var size: Int {
+        get { return count }
+    }
+    
     /* Conforming to Factory */
     
     typealias In = X
-    typealias Out = Array<X>
+    typealias Out = ArraySeq<X>
 
-    static func newBuilder() -> ArrayBuilder<X> {
-        return ArrayBuilder<X>()
+    static func newBuilder() -> ArraySeqBuilder<X> {
+        return ArraySeqBuilder<X>()
     }
 
 }
 
-struct ArrayIterator<X>: IteratorProtocol {
+struct ArraySeqIterator<X>: IteratorProtocol {
     
     typealias Element = X
     
@@ -67,10 +71,10 @@ struct ArrayIterator<X>: IteratorProtocol {
     
 }
 
-class ArrayBuilder<X>: Builder {
+class ArraySeqBuilder<X>: Builder {
     
     typealias In = X
-    typealias Out = Array<X>
+    typealias Out = ArraySeq<X>
     
     var _arr: Swift.Array<X>
     
@@ -82,8 +86,8 @@ class ArrayBuilder<X>: Builder {
         _arr.append(input)
     }
     
-    func result() -> Array<X> {
-        return Array(elements: _arr)
+    func result() -> ArraySeq<X> {
+        return ArraySeq(elements: _arr)
     }
 
 }
