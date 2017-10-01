@@ -13,6 +13,10 @@ protocol MapProtocol {
 }
 
 extension MapProtocol {
+    func hasNot(key: Key) -> Bool {
+        return !has(key: key)
+    }
+    
     subscript(key: Key) -> Val? {
         get { return valueOf(key: key)}
     }
