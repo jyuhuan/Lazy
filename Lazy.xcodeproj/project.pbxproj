@@ -6,20 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		"Lazy::LazyPackageTests::ProductTarget" /* LazyPackageTests */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = OBJ_39 /* Build configuration list for PBXAggregateTarget "LazyPackageTests" */;
-			buildPhases = (
-			);
-			dependencies = (
-				OBJ_42 /* PBXTargetDependency */,
-			);
-			name = LazyPackageTests;
-			productName = LazyPackageTests;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		966754351F801E8A00F2DD05 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9693B24C1F801E0C0069489F /* Array.swift */; };
 		966754361F801E8A00F2DD05 /* Range.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9693B24D1F801E0C0069489F /* Range.swift */; };
@@ -43,13 +29,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = "Lazy::Lazy";
 			remoteInfo = Lazy;
-		};
-		9693B2491F801D520069489F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "Lazy::LazyTests";
-			remoteInfo = LazyTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -202,20 +181,6 @@
 			productReference = "Lazy::LazyTests::Product" /* LazyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		"Lazy::SwiftPMPackageDescription" /* LazyPackageDescription */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_17 /* Build configuration list for PBXNativeTarget "LazyPackageDescription" */;
-			buildPhases = (
-				OBJ_20 /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = LazyPackageDescription;
-			productName = LazyPackageDescription;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -236,22 +201,13 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				"Lazy::SwiftPMPackageDescription" /* LazyPackageDescription */,
 				"Lazy::LazyTests" /* LazyTests */,
 				"Lazy::Lazy" /* Lazy */,
-				"Lazy::LazyPackageTests::ProductTarget" /* LazyPackageTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		OBJ_20 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		OBJ_26 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
@@ -286,32 +242,9 @@
 			target = "Lazy::Lazy" /* Lazy */;
 			targetProxy = 9693B2481F801D520069489F /* PBXContainerItemProxy */;
 		};
-		OBJ_42 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "Lazy::LazyTests" /* LazyTests */;
-			targetProxy = 9693B2491F801D520069489F /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		OBJ_18 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Library/Developer/Toolchains/swift-4.0-RELEASE.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
-				SWIFT_VERSION = 4.0;
-			};
-			name = Debug;
-		};
-		OBJ_19 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Library/Developer/Toolchains/swift-4.0-RELEASE.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
-				SWIFT_VERSION = 4.0;
-			};
-			name = Release;
-		};
 		OBJ_24 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -436,30 +369,9 @@
 			};
 			name = Release;
 		};
-		OBJ_40 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		OBJ_41 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		OBJ_17 /* Build configuration list for PBXNativeTarget "LazyPackageDescription" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				OBJ_18 /* Debug */,
-				OBJ_19 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		OBJ_2 /* Build configuration list for PBXProject "Lazy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -483,15 +395,6 @@
 			buildConfigurations = (
 				OBJ_33 /* Debug */,
 				OBJ_34 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		OBJ_39 /* Build configuration list for PBXAggregateTarget "LazyPackageTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				OBJ_40 /* Debug */,
-				OBJ_41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
