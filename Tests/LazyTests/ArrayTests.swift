@@ -28,6 +28,8 @@ class ArrayTests: XCTestCase {
     }
 
     func testCreateArrayByFillingResultsFromAFunction() {
+        // Most common use case: Array.fill(5, arc4random())
+        // Need to pass by name
         var i = -1
         func newNumber() -> Int {
             i += 1
