@@ -6,31 +6,50 @@
 //  Copyright © 2017 Yuhuan Jiang. All rights reserved.
 //
 
+
+/// The base protocol for all Lazy collection that provides an iterator.
+///
+/// As for Swift 4, the `for-in` syntax is only supported on `Sqeuence` objects.
+/// However, by definition an object that comforms to `IterableProtocol` is not a sequence.
+/// To iterate through a Lazy iterable, there are two ways:
+///
+/// **Using a While Loop**
+///
+///     let xs =  // some iterable
+///     let iterator = xs.makeIterator()
+///     while let x = iterator.next() {
+///         // do something with x
+///     }
+///
+/// **Using `swiftSequence`**
+///
+///     let xs =  // some iterable
+///     for x in xs.swiftSequence {
+///         // do something with x
+///     }
+///
+/// This cumbersome notation will be abandoned when Swift provides more friendly `for-in` syntax support.
 protocol IterableProtocol {
+    
+    /// The type of the elements in the collection.
     associatedtype Element
+    
+    /// The iterator exposed by this collection.
     associatedtype Iterator: IteratorProtocol where Iterator.Element == Element
 
+    /// Creates a new iterator that iterates through this collection.
     func makeIterator() -> Iterator
 }
 
-
-// Higher-order functions
+// MARK: - Higher-order functions
 extension IterableProtocol {
-
+    
     func mapped<NewElement>(by transformation: @escaping (Element) -> NewElement) -> MappedIterable<Self, NewElement> {
         return MappedIterable(self, transformation)
     }
     
     func map<NewElement>(_ f: @escaping (Element) -> NewElement) -> MappedIterable<Self, NewElement> {
         return mapped(by: f)
-    }
-    
-    func filtered(by predicate: @escaping (Element) -> Bool) -> FilteredIterable<Self> {
-        return FilteredIterable(self, predicate)
-    }
-    
-    func filter(_ p: @escaping (Element) -> Bool) -> FilteredIterable<Self> {
-        return filtered(by: p)
     }
     
     func flatMapped<NewIterable: IterableProtocol>(by transforamtion: @escaping (Element) -> NewIterable) -> FlatMappedIterable<Self, NewIterable> {
@@ -40,6 +59,27 @@ extension IterableProtocol {
     func flatMap<NewIterable: IterableProtocol>(by transforamtion: @escaping (Element) -> NewIterable) -> FlatMappedIterable<Self, NewIterable> {
         return flatMapped(by: transforamtion)
     }
+
+    func filtered(by predicate: @escaping (Element) -> Bool) -> FilteredIterable<Self> {
+        return FilteredIterable(self, predicate)
+    }
+    
+    func filter(_ p: @escaping (Element) -> Bool) -> FilteredIterable<Self> {
+        return filtered(by: p)
+    }
+    
+    func filtered(notBy predicate: @escaping (Element) -> Bool) -> FilteredIterable<Self> {
+        return filtered(by: {e in !predicate(e)})
+    }
+    
+    func filterNot(_ p: @escaping (Element) -> Bool) -> FilteredIterable<Self> {
+        return filtered(notBy: p)
+    }
+    
+//    func grouped<E: Equatable>(by: ) -> <#return type#>  where E.{
+//        <#function body#>
+//    }
+    
     
 }
 
@@ -194,6 +234,11 @@ class FlatMappedIterable<OldIterable: IterableProtocol, NewIterable: IterablePro
         return FlatMappedIterator(oldIterable.makeIterator()){ e in self.f(e).makeIterator() }
     }
 }
+
+//class GroupedByIterable<OldIterable: IterableProtocol, NewIterable: IterableProtocol>: IterableProtocol where NewIterable.Iterator.Element == OldIterable.Element {
+//    typealias Element = NewIterable
+//    typealias Iterator = NewIterable.Iterator
+//}
 
 
 class ReversedIterable<OldIterable: IterableProtocol>/* : IterableProtocol */ {
