@@ -35,8 +35,8 @@ extension IterableProtocol {
         return filtered(by: p)
     }
     
-    func flatMapped<TargetIterable: IterableProtocol>(by transforamtion: @escaping (Element) -> TargetIterable) -> IterableOf<FlatMappedIterator<Self.Iterator, TargetIterable.Iterator>> {
-        fatalError()
+    func flatMapped<NewIterable: IterableProtocol>(by transforamtion: @escaping (Element) -> NewIterable) -> FlatMappedIterable<Self, NewIterable> {
+        return FlatMappedIterable(self, transforamtion)
     }
     
 }
@@ -140,6 +140,23 @@ class FilteredIterable<OldIterable: IterableProtocol>: IterableProtocol {
     
     func makeIterator() -> FilteredIterator<OldIterable.Iterator> {
         return FilteredIterator(oldIterable.makeIterator(), p)
+    }
+}
+
+class FlatMappedIterable<OldIterable: IterableProtocol, NewIterable: IterableProtocol>: IterableProtocol {
+    typealias Element = NewIterable.Element
+    typealias Iterator = FlatMappedIterator<OldIterable.Iterator, NewIterable.Iterator>
+    
+    let oldIterable: OldIterable
+    let f: (OldIterable.Element) -> NewIterable
+    
+    init(_ oldIterable: OldIterable, _ f: @escaping (OldIterable.Element) -> NewIterable) {
+        self.oldIterable = oldIterable
+        self.f = f
+    }
+    
+    func makeIterator() -> FlatMappedIterator<OldIterable.Iterator, NewIterable.Iterator> {
+        return FlatMappedIterator(oldIterable.makeIterator()){ e in self.f(e).makeIterator() }
     }
 }
 

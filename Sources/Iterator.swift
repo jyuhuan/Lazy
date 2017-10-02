@@ -1,4 +1,4 @@
-//
+ //
 //  Iterator.swift
 //  Collection
 //
@@ -6,9 +6,17 @@
 //  Copyright © 2017 Yuhuan Jiang. All rights reserved.
 //
 
+
+/// Would be so much better if this is defined as
+///
+///     struct EmptyIterator: IteratorProtocol {
+///         typealias Element = Never
+///         mutating func next() -> Never? { fatalError("Cannot call next on an empty iterator!") }
+///     }
+///
 struct EmptyIterator<T>: IteratorProtocol {
     typealias Element = T
-    mutating func next() -> T? { fatalError("Cannot call next on an empty iterator!") }
+    mutating func next() -> T? { return nil }
 }
 
 /// The iterator in the iterable returned by the property `indexed`
@@ -75,20 +83,34 @@ class FilteredIterator<OldIterator: IteratorProtocol>: IteratorProtocol {
     }
 }
 
-struct FlatMappedIterator<T, U>: IteratorProtocol {
+struct FlatMappedIterator<OldIterator: IteratorProtocol, NewIterator: IteratorProtocol>: IteratorProtocol {
     
-    typealias Element = U
+    typealias Element = NewIterator.Element
     
-    var outer: AnyIterator<T>
-    var inner: AnyIterator<U>
+    var outer: OldIterator
+    var inner: AnyIterator<NewIterator.Element>
     
-    init(_ sourceIterator: AnyIterator<T>) {
-        self.outer = sourceIterator
-        self.inner = AnyIterator<U>(EmptyIterator<U>())
+    let f: (OldIterator.Element) -> NewIterator
+    
+    init(_ oldIterator: OldIterator, _ f: @escaping (OldIterator.Element) -> NewIterator) {
+        self.f = f
+        self.outer = oldIterator
+        self.inner = AnyIterator(EmptyIterator<NewIterator.Element>())
     }
     
-    mutating func next() -> U? {
-        fatalError("???")
+    mutating func next() -> NewIterator.Element? {
+        let innerElement = inner.next()
+        if innerElement != nil {
+            return innerElement
+        }
+        else {
+            while let outerElement = outer.next() {
+                inner = AnyIterator(f(outerElement))
+                let newInnerElement = inner.next()
+                if newInnerElement != nil { return newInnerElement }
+            }
+            return nil
+        }
     }
 
 }
