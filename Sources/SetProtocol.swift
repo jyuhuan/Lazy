@@ -5,37 +5,36 @@
 //  Created by Yuhuan Jiang on 10/1/17.
 //
 
-protocol SetProtocol: MapProtocol where Val == Void {
-    
-//    func interset<ThatSet: SetProtocol, ResultSet: SetProtocol>(that: ThatSet) -> ResultSet
-//    func union<ThatSet: SetProtocol, ResultSet: SetProtocol>(that: ThatSet) -> ResultSet
+
+protocol SetProtocol {
+    associatedtype Element
+    func has(_ element: Element) -> Bool
 }
 
 extension SetProtocol {
-    
-    func valueOf(key: Key) -> Void? {
-        return nil
+    func hasNot(_ element: Element) -> Bool {
+        return !has(element)
     }
-
-    func filtered(by predicate: @escaping (Key) -> Bool) -> FilteredSet<Self> {
+    
+    func filtered(by predicate: @escaping (Element) -> Bool) -> FilteredSet<Self> {
         return FilteredSet(self, predicate)
     }
 }
 
 
 struct FilteredSet<SourceSet: SetProtocol>: SetProtocol {
-    typealias Key = SourceSet.Key
+    typealias Element = SourceSet.Element
     
     let sourceSet: SourceSet
-    let p: (Key) -> Bool
+    let p: (Element) -> Bool
     
-    init(_ sourceSet: SourceSet, _ p: @escaping (Key) -> Bool) {
+    init(_ sourceSet: SourceSet, _ p: @escaping (Element) -> Bool) {
         self.sourceSet = sourceSet
         self.p = p
     }
     
-    func has(key: Key) -> Bool {
-        return sourceSet.has(key: key) && p(key)
+    func has(_ element: Element) -> Bool {
+        return sourceSet.has(element) && p(element)
     }
     
 }

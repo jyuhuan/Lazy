@@ -41,6 +41,11 @@ class ArraySeqTests: XCTestCase {
         }
     }
     
+    func testFilter() {
+        let xs = ArraySeq.of(elements: "alice", "bob", "catherine", "david", "emily")
+        let filtered = xs.filtered(by: {x in x.count <= 3})
+    }
+    
     func testCreateArraySeqByTabulating() {
         let arr = ArraySeq.tabulate(5){i in return i * 10}
         assert(arr.count == 5)

@@ -5,8 +5,8 @@
 //  Created by Yuhuan Jiang on 10/1/17.
 //
 
-class ArraySet<X: Equatable>: SetProtocol {
-    typealias Key = X
+class ArraySet<X: Equatable>: SetProtocol {    
+    typealias Element = X
     
     var elements: [X]
     
@@ -14,8 +14,8 @@ class ArraySet<X: Equatable>: SetProtocol {
         self.elements = elements
     }
     
-    func has(key: X) -> Bool {
-        return elements.index(of: key) != nil
+    func has(_ element: X) -> Bool {
+        return elements.index(of: element) != nil
     }
 
 }

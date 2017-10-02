@@ -13,9 +13,9 @@ class ArraySetTests: XCTestCase {
     func testSetFilter() {
         let set = ArraySet<String>(elements: "dog", "kitten", "pig")
         let filteredSet = set.filtered { name in name.count <= 3 }
-        XCTAssert(filteredSet.has(key: "dog"))
-        XCTAssert(filteredSet.hasNot(key: "kitten"))
-        XCTAssert(filteredSet.has(key: "pig"))
+        XCTAssert(filteredSet.has("dog"))
+        XCTAssert(filteredSet.hasNot("kitten"))
+        XCTAssert(filteredSet.has("pig"))
     }
 
 }
