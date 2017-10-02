@@ -1,6 +1,6 @@
 //
 //  Iterator.swift
-//  Collection
+//  Lazy
 //
 //  Created by Yuhuan Jiang on 9/29/17.
 //  Copyright © 2017 Yuhuan Jiang. All rights reserved.
@@ -78,9 +78,18 @@ extension IterableProtocol {
     /// - Returns: A collection of the desired type which contains elements from this iterable.
     ///
     /// - Todo: Would be so much better if this could be defined as
-    ///         `to<F: Factory>() -> F.Out where F.In == Self.Element`.
-    ///         Alas, Swift 4 compiler complains:
-    ///         Generic parameter 'F' is not used in function signature
+    ///
+    ///       func to<F: Factory>() -> F.Out where F.In == Self.Element {
+    ///           var builder = F.newBuilder()
+    ///           var iterator = self.makeIterator()
+    ///           while let element = iterator.next() {
+    ///               builder.add(element)
+    ///           }
+    ///           return buidler.result()
+    ///       }
+    ///
+    ///   Alas, Swift 4 compiler complains:
+    ///   `Generic parameter 'F' is not used in function signature`.
     func to<B: Builder>(_ newBuilder: () -> B) -> B.Out where B.In == Self.Element {
         var builder = newBuilder()
         var iterator = self.makeIterator()
@@ -114,7 +123,7 @@ func createIterable<Iterator: IteratorProtocol>(from iterator: @escaping @autocl
     return IterableOf(iterator)
 }
 
-struct IterableOf<Iterator: IteratorProtocol>: IterableProtocol {
+class IterableOf<Iterator: IteratorProtocol>: IterableProtocol {
     typealias Element = Iterator.Element
     var iterator: () -> Iterator
     init(_ iterator: @escaping @autoclosure () -> Iterator) { self.iterator = iterator }
@@ -210,7 +219,7 @@ class ZippedIterable<Iterable1: IterableProtocol, Iterable2: IterableProtocol>: 
 
 // Conversion from Lazy iterables to Swift Sequences, so that the for-in syntax can be used.
 
-struct SwiftSequenceFromIterable<Iterable: IterableProtocol>: Sequence {
+class SwiftSequenceFromIterable<Iterable: IterableProtocol>: Sequence {
     typealias Element = Iterable.Element
     typealias Iterator = Iterable.Iterator
 

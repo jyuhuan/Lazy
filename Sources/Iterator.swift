@@ -1,26 +1,27 @@
- //
+//
 //  Iterator.swift
-//  Collection
+//  Lazy
 //
 //  Created by Yuhuan Jiang on 9/29/17.
 //  Copyright © 2017 Yuhuan Jiang. All rights reserved.
 //
 
 
-/// Would be so much better if this is defined as
+/// -Todo: Would be so much better if this is defined as
 ///
 ///     struct EmptyIterator: IteratorProtocol {
 ///         typealias Element = Never
 ///         mutating func next() -> Never? { fatalError("Cannot call next on an empty iterator!") }
 ///     }
 ///
-struct EmptyIterator<T>: IteratorProtocol {
+///  But this makes Swift 4 compiler crash.
+class EmptyIterator<T>: IteratorProtocol {
     typealias Element = T
-    mutating func next() -> T? { return nil }
+    func next() -> T? { return nil }
 }
 
 /// The iterator in the iterable returned by the property `indexed`
-struct IndexedIterator<OldIterator: IteratorProtocol>: IteratorProtocol {
+class IndexedIterator<OldIterator: IteratorProtocol>: IteratorProtocol {
     
     typealias Element = (Int, OldIterator.Element)
     
@@ -32,7 +33,7 @@ struct IndexedIterator<OldIterator: IteratorProtocol>: IteratorProtocol {
         i = -1
     }
     
-    mutating func next() -> (Int, OldIterator.Element)? {
+    func next() -> (Int, OldIterator.Element)? {
         let oldNext = oldIter.next();
         if oldNext == nil { return nil }
         i += 1
@@ -42,7 +43,7 @@ struct IndexedIterator<OldIterator: IteratorProtocol>: IteratorProtocol {
 }
 
 /// The iterator in the iterable returned by the method `mapped:by`.
-struct MappedIterator<OldIterator: IteratorProtocol, NewElement>: IteratorProtocol {
+class MappedIterator<OldIterator: IteratorProtocol, NewElement>: IteratorProtocol {
     
     typealias Element = NewElement
     
@@ -54,7 +55,7 @@ struct MappedIterator<OldIterator: IteratorProtocol, NewElement>: IteratorProtoc
         self.f = f
     }
     
-    mutating func next() -> NewElement? {
+    func next() -> NewElement? {
         let old = oldIterator.next()
         return old == nil ? nil : f(old!)
     }
