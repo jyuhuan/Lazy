@@ -39,6 +39,10 @@ extension IterableProtocol {
         return FlatMappedIterable(self, transforamtion)
     }
     
+    func flatMap<NewIterable: IterableProtocol>(by transforamtion: @escaping (Element) -> NewIterable) -> FlatMappedIterable<Self, NewIterable> {
+        return flatMapped(by: transforamtion)
+    }
+    
 }
 
 extension IterableProtocol {

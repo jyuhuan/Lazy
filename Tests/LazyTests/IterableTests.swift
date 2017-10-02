@@ -10,11 +10,16 @@ import XCTest
 
 class IterableTests: XCTestCase {
 
-    func testFlatMap() {
+    func testFlatMappedBy() {
         let xs = ArraySeq.of(elements: "alice", "bob", "catherine")
         let ys = xs.flatMapped(by: {s in ArraySeq.of(elements: "a", "b", "c")})
         let arr = ys.toArray()
-        let bp = 0
+    }
+
+    func testFlatMap() {
+        let xs = ArraySeq.of(elements: "alice", "bob", "catherine")
+        let ys = xs.flatMap{s in ArraySeq.of(elements: "a", "b", "c")}
+        let arr = ys.toArray()
     }
 
 }
