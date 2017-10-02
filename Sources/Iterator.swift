@@ -83,7 +83,7 @@ class FilteredIterator<OldIterator: IteratorProtocol>: IteratorProtocol {
     }
 }
 
-struct FlatMappedIterator<OldIterator: IteratorProtocol, NewIterator: IteratorProtocol>: IteratorProtocol {
+class FlatMappedIterator<OldIterator: IteratorProtocol, NewIterator: IteratorProtocol>: IteratorProtocol {
     
     typealias Element = NewIterator.Element
     
@@ -98,7 +98,7 @@ struct FlatMappedIterator<OldIterator: IteratorProtocol, NewIterator: IteratorPr
         self.inner = AnyIterator(EmptyIterator<NewIterator.Element>())
     }
     
-    mutating func next() -> NewIterator.Element? {
+    func next() -> NewIterator.Element? {
         let innerElement = inner.next()
         if innerElement != nil {
             return innerElement
@@ -112,5 +112,25 @@ struct FlatMappedIterator<OldIterator: IteratorProtocol, NewIterator: IteratorPr
             return nil
         }
     }
-
 }
+
+ 
+ class ZippedIterator<Iterator1: IteratorProtocol, Iterator2: IteratorProtocol>: IteratorProtocol {
+    typealias Element = (Iterator1.Element, Iterator2.Element)
+    
+    var i1: Iterator1
+    var i2: Iterator2
+    
+    init(_ i1: Iterator1, _ i2: Iterator2) {
+        self.i1 = i1
+        self.i2 = i2
+    }
+    
+    func next() -> (Iterator1.Element, Iterator2.Element)? {
+        let e1 = i1.next()
+        if e1 == nil { return nil }
+        let e2 = i2.next()
+        if e2 == nil { return nil }
+        return (e1!, e2!)
+    }
+ }

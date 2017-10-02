@@ -13,11 +13,9 @@ protocol IterableProtocol {
     func makeIterator() -> Iterator
 }
 
-extension IterableProtocol {
 
-    var indexed: IndexedIterable<Self> {
-        get { return IndexedIterable(self) }
-    }
+// Higher-order functions
+extension IterableProtocol {
 
     func mapped<NewElement>(by transformation: @escaping (Element) -> NewElement) -> MappedIterable<Self, NewElement> {
         return MappedIterable(self, transformation)
@@ -45,6 +43,27 @@ extension IterableProtocol {
     
 }
 
+
+
+// Convenient transformations
+extension IterableProtocol {
+    
+    var indexed: IndexedIterable<Self> {
+        get { return IndexedIterable(self) }
+    }
+    
+    var reversed: ReversedIterable<Self> {
+        get { fatalError() }
+    }
+    
+    func zipped<That: IterableProtocol>(with that: That) -> ZippedIterable<Self, That> {
+        return ZippedIterable(self, that)
+    }
+
+}
+
+
+// Conversions
 extension IterableProtocol {
     
     /// Converts this iterable to any collection that is also a factory.
@@ -161,6 +180,27 @@ class FlatMappedIterable<OldIterable: IterableProtocol, NewIterable: IterablePro
     
     func makeIterator() -> FlatMappedIterator<OldIterable.Iterator, NewIterable.Iterator> {
         return FlatMappedIterator(oldIterable.makeIterator()){ e in self.f(e).makeIterator() }
+    }
+}
+
+
+class ReversedIterable<OldIterable: IterableProtocol>/* : IterableProtocol */ {
+}
+
+class ZippedIterable<Iterable1: IterableProtocol, Iterable2: IterableProtocol>: IterableProtocol {
+    typealias Element = (Iterable1.Element, Iterable2.Element)
+    typealias Iterator = ZippedIterator<Iterable1.Iterator, Iterable2.Iterator>
+    
+    let i1: Iterable1
+    let i2: Iterable2
+    
+    init(_ i1: Iterable1, _ i2: Iterable2) {
+        self.i1 = i1
+        self.i2 = i2
+    }
+    
+    func makeIterator() -> ZippedIterator<Iterable1.Iterator, Iterable2.Iterator> {
+        return ZippedIterator(i1.makeIterator(), i2.makeIterator())
     }
 }
 
