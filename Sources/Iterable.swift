@@ -59,6 +59,9 @@ extension IterableProtocol {
     func zipped<That: IterableProtocol>(with that: That) -> ZippedIterable<Self, That> {
         return ZippedIterable(self, that)
     }
+    func zip<That: IterableProtocol>(with that: That) -> ZippedIterable<Self, That> {
+        return zipped(with: that)
+    }
 
 }
 
