@@ -3,31 +3,31 @@ import XCTest
 
 class ArraySeqTests: XCTestCase {
     
-    func testCreateEmptyArraySeq() {
+    func testCreateEmpty() {
         let arr = ArraySeq<String>.empty()
         assert(arr.count == 0)
         for _ in arr.swiftSequence {
-            assert(false)  // Should never enter here
+            XCTAssert(false)  // Should never enter here
         }
     }
     
-    func testCreateArraySeqOutOfElements() {
+    func testCreateOutOfElements() {
         let arr = ArraySeq.of(elements: "a", "b")
         assert(arr.count == 2)
         for (i, x) in arr.indexed.swiftSequence {
-            assert(x == arr[i])
+            XCTAssert(x == arr[i])
         }
     }
     
-    func testCreateArrayByFillingPlainNumbers() {
+    func testCreateByFillingPlainNumbers() {
         let arr = ArraySeq.fill(5, 8)
         assert(arr.count == 5)
         for x in arr.swiftSequence {
-            assert(x == 8)
+            XCTAssert(x == 8)
         }
     }
 
-    func testCreateArraySeqByFillingResultsFromAFunction() {
+    func testCreateByFillingResultsFromAFunction() {
         // Most common use case: Array.fill(5, arc4random())
         // Need to pass by name
         var i = -1
@@ -37,24 +37,87 @@ class ArraySeqTests: XCTestCase {
         }
         let arr = ArraySeq.fill(5, newNumber())
         for (i, x) in arr.indexed.swiftSequence {
-            assert(x == i)
+            XCTAssert(x == i)
         }
+    }
+    
+    func testCreateByTabulating() {
+        let arr = ArraySeq.tabulate(5){i in return i * 10}
+        assert(arr.count == 5)
+        for (i, x) in arr.indexed.swiftSequence {
+            XCTAssert(x == i * 10)
+        }
+    }
+    
+    func testIndexed() {
+        let arr = ["alice", "bob", "catherine", "daniel", "emily"]
+        let xs = ArraySeq<String>(elements: arr)
+        for (i, x) in xs.indexed.swiftSequence {
+            XCTAssert(arr[i] == x)
+        }
+    }
+    
+    func testMappedBy() {
+        let xs: ArraySeq<String> = ArraySeq<String>.of(elements: "alice", "bob", "catherine", "daniel", "emily")
+        let ys = xs.mapped(by: {s in s.count})
+        let arr = ys.toArray()
+        XCTAssert(arr[0] == 5)
+        XCTAssert(arr[1] == 3)
+        XCTAssert(arr[2] == 9)
+        XCTAssert(arr[3] == 6)
+        XCTAssert(arr[4] == 5)
+    }
+    
+    func testMap() {
+        let xs: ArraySeq<String> = ArraySeq<String>.of(elements: "alice", "bob", "catherine", "daniel", "emily")
+        let ys = xs.map{s in s.count}
+        let arr = ys.toArray()
+        XCTAssert(arr[0] == 5)
+        XCTAssert(arr[1] == 3)
+        XCTAssert(arr[2] == 9)
+        XCTAssert(arr[3] == 6)
+        XCTAssert(arr[4] == 5)
+    }
+    
+    func testFilteredBy() {
+        let xs = ArraySeq.of(elements: "alice", "bob", "catherine", "david", "emily")
+        let ys = xs.filtered(by: {x in x.count <= 3})
+        XCTAssert(ys.size == 1)
+        let arr = ys.toArray()
+        XCTAssert(arr.count == 1)
+        XCTAssert(arr[0] == "bob")
     }
     
     func testFilter() {
         let xs = ArraySeq.of(elements: "alice", "bob", "catherine", "david", "emily")
-        let filtered = xs.filtered(by: {x in x.count <= 3})
+        let ys = xs.filter{x in x.count <= 3}
+        XCTAssert(ys.size == 1)
+        let arr = ys.toArray()
+        XCTAssert(arr.count == 1)
+        XCTAssert(arr[0] == "bob")
     }
-    
+
     func testConsecutiveGrouped() {
         let xs = ArraySeq.of(elements: "alice", "bob", "catherine", "david", "emily")
     }
 
-    func testCreateArraySeqByTabulating() {
-        let arr = ArraySeq.tabulate(5){i in return i * 10}
-        assert(arr.count == 5)
-        for (i, x) in arr.indexed.swiftSequence {
-            assert(x == i * 10)
+    func testFlatMappedBy() {
+        let xs = ArraySeq.of(elements: "alice", "bob")
+        let ys = xs.flatMapped(by: {s in ArraySeq(elements: Array(s))})
+        let observedIter = ys.toArray()
+        let expectedIter = Array("alicebob")
+        for (o, e) in zip(observedIter, expectedIter) {
+            XCTAssert(o == e)
+        }
+    }
+    
+    func testFlatMap() {
+        let xs = ArraySeq.of(elements: "alice", "bob")
+        let ys = xs.flatMap{s in ArraySeq(elements: Array(s))}
+        let observedIter = ys.toArray()
+        let expectedIter = Array("alicebob")
+        for (o, e) in zip(observedIter, expectedIter) {
+            XCTAssert(o == e)
         }
     }
     

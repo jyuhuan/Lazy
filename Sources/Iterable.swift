@@ -41,6 +41,23 @@ protocol IterableProtocol {
     func makeIterator() -> Iterator
 }
 
+
+
+// MARK: - Computed properties
+extension IterableProtocol {
+    var size: Int {
+        get {
+            var iter = makeIterator()
+            var result = 0
+            while iter.next() != nil {
+                result += 1
+            }
+            return result
+        }
+    }
+}
+
+
 // MARK: - Higher-order functions
 extension IterableProtocol {
     

@@ -6,7 +6,7 @@
 //  Copyright © 2017 Yuhuan Jiang. All rights reserved.
 //
 
-protocol SeqProtocol: IterableProtocol, MapProtocol where Key == Int, Val == Element {
+protocol SeqProtocol: IterableProtocol {
     var head: Element? { get }
     var tail: Self { get }
 }

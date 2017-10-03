@@ -9,11 +9,11 @@
 final class ArraySeq<X>: RandomAccessSeqProtocol, SeqFactory {
 
     typealias Element = X
-    typealias Iterator = ArraySeqIterator<X>
-
-    func makeIterator() -> ArraySeqIterator<X> {
-        return ArraySeqIterator(_elems)
-    }
+//    typealias Iterator = ArraySeqIterator<X>
+//
+//    func makeIterator() -> ArraySeqIterator<X> {
+//        return ArraySeqIterator(_elems)
+//    }
     
     var _elems: Swift.Array<X>
     
@@ -56,24 +56,24 @@ final class ArraySeq<X>: RandomAccessSeqProtocol, SeqFactory {
 
 }
 
-struct ArraySeqIterator<X>: IteratorProtocol {
-    
-    typealias Element = X
-    
-    var _elems: Swift.Array<X>
-    var _idx: Int
-    
-    init(_ elems: Swift.Array<X>) {
-        _elems = elems
-        _idx = -1
-    }
-    
-    mutating func next() -> X? {
-        _idx += 1
-        return _idx < _elems.count ? _elems[_idx] : nil
-    }
-    
-}
+//struct ArraySeqIterator<X>: IteratorProtocol {
+//    
+//    typealias Element = X
+//    
+//    var _elems: Swift.Array<X>
+//    var _idx: Int
+//    
+//    init(_ elems: Swift.Array<X>) {
+//        _elems = elems
+//        _idx = -1
+//    }
+//    
+//    mutating func next() -> X? {
+//        _idx += 1
+//        return _idx < _elems.count ? _elems[_idx] : nil
+//    }
+//    
+//}
 
 class ArraySeqBuilder<X>: Builder {
     
