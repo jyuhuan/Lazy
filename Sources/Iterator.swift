@@ -124,45 +124,87 @@ class FlatMappedIterator<OldIterator: IteratorProtocol, NewIterator: IteratorPro
 
 
 class GroupedConsecutivelyByIterator<Iterator: IteratorProtocol, Key: Equatable & Defaultable>: IteratorProtocol {
-    typealias Element = AnyIterator<Iterator.Element>
+    typealias Element = AnyIterable<RandomAccessSeqDefaultIterator<ArraySeq<Iterator.Element>>>
     
     let f: (Iterator.Element) -> Key
     var it: Iterator
     var key: Key
-    var g: Array<Iterator.Element>
-    var buf: Array<Iterator.Element>
-    
+    var g: ArraySeq<Iterator.Element>
+    var buf: ArraySeq<Iterator.Element>
     
     init(_ it: Iterator, _ f: @escaping (Iterator.Element) -> Key) {
         self.f = f
         self.it = it
         self.key = Key.defaultValue()
-        self.g = Array<Iterator.Element>()
-        self.buf = Array<Iterator.Element>()
+        self.g = ArraySeq<Iterator.Element>.empty()
+        self.buf = ArraySeq<Iterator.Element>.empty()
     }
     
-    func next() -> AnyIterator<Iterator.Element>? {
+    func next() -> Element? {
         while let cur = it.next() {
             let curKey = f(cur)
             if key == curKey || buf.isEmpty {
                 buf.append(cur)
+                key = curKey
             }
             else {
-                g = buf  // Note: Swift Arrays are values, not references
-                buf.removeAll()
+                g = buf.clone()
+                buf.clear()
                 buf.append(cur)
-                return AnyIterator(g.makeIterator())
+                key = curKey
+                return AnyIterable(g)
             }
         }
         if (!buf.isEmpty) {
-            g = buf
-            buf.removeAll()
-            return AnyIterator(g.makeIterator())
+            g = buf.clone()
+            buf.clear()
+            return AnyIterable(g)
         }
         return nil
     }
 }
- 
+
+
+//class GroupedConsecutivelyByIterator<Iterator: IteratorProtocol, Key: Equatable & Defaultable>: IteratorProtocol {
+//    typealias Element = AnyIterator<Iterator.Element>
+//
+//    let f: (Iterator.Element) -> Key
+//    var it: Iterator
+//    var key: Key
+//    var g: Array<Iterator.Element>
+//    var buf: Array<Iterator.Element>
+//
+//
+//    init(_ it: Iterator, _ f: @escaping (Iterator.Element) -> Key) {
+//        self.f = f
+//        self.it = it
+//        self.key = Key.defaultValue()
+//        self.g = Array<Iterator.Element>()
+//        self.buf = Array<Iterator.Element>()
+//    }
+//
+//    func next() -> AnyIterator<Iterator.Element>? {
+//        while let cur = it.next() {
+//            let curKey = f(cur)
+//            if key == curKey || buf.isEmpty {
+//                buf.append(cur)
+//            }
+//            else {
+//                g = buf  // Note: Swift Arrays are values, not references
+//                buf.removeAll()
+//                buf.append(cur)
+//                return AnyIterator(g.makeIterator())
+//            }
+//        }
+//        if (!buf.isEmpty) {
+//            g = buf
+//            buf.removeAll()
+//            return AnyIterator(g.makeIterator())
+//        }
+//        return nil
+//    }
+//}
+
 class ZippedIterator<Iterator1: IteratorProtocol, Iterator2: IteratorProtocol>: IteratorProtocol {
     typealias Element = (Iterator1.Element, Iterator2.Element)
     

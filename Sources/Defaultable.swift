@@ -13,3 +13,15 @@ protocol Defaultable {
     static func defaultValue() -> Self
     
 }
+
+extension Int: Defaultable {
+    static func defaultValue() -> Int {
+        return 0
+    }
+}
+
+extension String : Defaultable {
+    static func defaultValue() -> String {
+        return ""
+    }
+}

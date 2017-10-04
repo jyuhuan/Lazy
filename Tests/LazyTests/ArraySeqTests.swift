@@ -121,5 +121,26 @@ class ArraySeqTests: XCTestCase {
         }
     }
     
+    func testGroupConsecutivelyBy() {
+        let xs: ArraySeq<Int> = ArraySeq.of(elements: 1, 4, 7, 2, 5, 2, 0, 3, 1 )
+        let ys: GroupedConsecutivelyByIterable<ArraySeq<Int>, Int> = xs.groupedConsecutively { (s: Int) -> Int in
+            return s % 3
+        }
+        
+        let outer = ys.toArray()
+        XCTAssert(outer.count == 4)
+        
+        let inner0 = outer[0].toArray()
+        let inner1 = outer[1].toArray()
+        let inner2 = outer[2].toArray()
+        let inner3 = outer[3].toArray()
+        
+        XCTAssert(inner0 == [1, 4, 7])
+        XCTAssert(inner1 == [2, 5, 2])
+        XCTAssert(inner2 == [0, 3])
+        XCTAssert(inner3 == [1])
+
+    }
+    
 }
 

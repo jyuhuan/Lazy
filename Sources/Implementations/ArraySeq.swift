@@ -45,6 +45,26 @@ final class ArraySeq<X>: RandomAccessSeqProtocol, SeqFactory {
         get { return count }
     }
     
+    var isEmpty: Bool {
+        get { return _elems.count == 0 }
+    }
+    
+    var notEmpty: Bool {
+        get { return !isEmpty }
+    }
+    
+    func append(_ element: X) {
+        _elems.append(element)
+    }
+    
+    func clear() {
+        _elems.removeAll()
+    }
+    
+    func clone() -> ArraySeq<X> {
+        return ArraySeq<X>(elements: _elems)
+    }
+    
     /* Conforming to Factory */
     
     typealias In = X

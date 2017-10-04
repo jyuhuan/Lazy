@@ -93,10 +93,9 @@ extension IterableProtocol {
         return filtered(notBy: p)
     }
     
-//    func grouped<E: Equatable>(by: ) -> <#return type#>  where E.{
-//        <#function body#>
-//    }
-    
+    func groupedConsecutively<Key: Equatable>(by: @escaping (Element) -> Key) -> GroupedConsecutivelyByIterable<Self, Key> {
+        return GroupedConsecutivelyByIterable(self, by)
+    }
     
 }
 
@@ -252,11 +251,25 @@ class FlatMappedIterable<OldIterable: IterableProtocol, NewIterable: IterablePro
     }
 }
 
-//class GroupedByIterable<OldIterable: IterableProtocol, NewIterable: IterableProtocol>: IterableProtocol where NewIterable.Iterator.Element == OldIterable.Element {
-//    typealias Element = NewIterable
-//    typealias Iterator = NewIterable.Iterator
-//}
+class GroupedConsecutivelyByIterable<Iterable: IterableProtocol, Key: Equatable & Defaultable>: IterableProtocol {
+    typealias Element = GroupedConsecutivelyByIterator<Iterable.Iterator, Key>.Element
+    
+    typealias Iterator = GroupedConsecutivelyByIterator<Iterable.Iterator, Key>
+    
 
+    let f: (Iterable.Element) -> Key
+    let iterable: Iterable
+
+    init(_ iterable: Iterable, _ f: @escaping (Iterable.Element) -> Key) {
+        self.f = f
+        self.iterable = iterable
+    }
+    
+    func makeIterator() -> GroupedConsecutivelyByIterator<Iterable.Iterator, Key> {
+        return GroupedConsecutivelyByIterator(iterable.makeIterator(), f)
+    }
+
+}
 
 class ReversedIterable<OldIterable: IterableProtocol>/* : IterableProtocol */ {
 }
@@ -311,3 +324,20 @@ extension IterableProtocol {
     }
 }
 
+
+/// A type-erased iterable. The element type is obtained from the iterator type `I`.
+class AnyIterable<I: IteratorProtocol>: IterableProtocol {
+    typealias Element = I.Element
+    typealias Iterator = I
+    
+    var makeIteratorImpl: () -> Iterator
+    
+    init<Iterable: IterableProtocol>(_ iterable: Iterable) where Iterable.Iterator == I {
+        let iterableCopy = iterable
+        self.makeIteratorImpl = { iterableCopy.makeIterator() }
+    }
+    
+    func makeIterator() -> Iterator {
+        return makeIteratorImpl()
+    }
+}
