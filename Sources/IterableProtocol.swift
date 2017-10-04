@@ -156,7 +156,7 @@ extension IterableProtocol {
     ///
     ///   Alas, Swift 4 compiler complains:
     ///   `Generic parameter 'F' is not used in function signature`.
-    func to<B: Builder>(_ newBuilder: () -> B) -> B.Out where B.In == Self.Element {
+    func to<B: Builder>(_ newBuilder: @autoclosure () -> B) -> B.Out where B.In == Self.Element {
         var builder = newBuilder()
         var iterator = self.makeIterator()
         while let element = iterator.next() {
@@ -180,14 +180,6 @@ extension IterableProtocol {
     }
 }
 
-
-/// Creates an iterable out of an iterator.
-///
-/// - Parameter iterator: A function that generates a new iterator every time it is paremeterlessly invoked.
-/// - Returns: An iterable that returns the provided iterator every time it is iterated.
-func createIterable<Iterator: IteratorProtocol>(from iterator: @escaping @autoclosure () -> Iterator) -> IterableOf<Iterator> {
-    return IterableOf(iterator)
-}
 
 class IterableOf<Iterator: IteratorProtocol>: IterableProtocol {
     typealias Element = Iterator.Element

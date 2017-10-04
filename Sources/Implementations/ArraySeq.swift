@@ -115,4 +115,3 @@ class ArraySeqBuilder<X>: Builder {
     }
 
 }
-

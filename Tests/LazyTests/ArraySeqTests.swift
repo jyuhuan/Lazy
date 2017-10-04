@@ -98,7 +98,6 @@ class ArraySeqTests: XCTestCase {
     }
 
     func testConsecutiveGrouped() {
-        let xs = ArraySeq.of(elements: "alice", "bob", "catherine", "david", "emily")
     }
 
     func testFlatMappedBy() {

@@ -66,6 +66,36 @@ class IterableTests: XCTestCase {
         XCTAssert(ys.toArray() == expectedArr)
         XCTAssert(zs.toArray() == expectedArr)
     }
+
+    func testFlatMapWithEmptyTarget() {
+        func stringToCharacters(_ str: String) -> TestableIterable<Character> {
+            if str == "bob" {
+                return TestableIterable([])
+            }
+            else {
+                return TestableIterable(Array(str.characters))
+            }
+        }
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        let zs = xs.flatMap(stringToCharacters)
+        let expectedArr = Array("alicecatherinedaniel".characters)
+        XCTAssert(zs.toArray() == expectedArr)
+    }
+    
+    func testFlatMapOnEmptyIterable() {
+        func stringToCharacters(_ str: String) -> TestableIterable<Character> {
+            if str == "bob" {
+                return TestableIterable([])
+            }
+            else {
+                return TestableIterable(Array(str.characters))
+            }
+        }
+        let xs = TestableIterable<String>([])
+        let zs = xs.flatMap(stringToCharacters)
+        let expectedArr = Array("".characters)
+        XCTAssert(zs.toArray() == expectedArr)
+    }
     
     func testFilter() {
         let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
@@ -115,6 +145,27 @@ class IterableTests: XCTestCase {
         }
     }
     
+    func testZipIterablesWithDifferentNumOfElems() {
+        let xArr = ["alice", "bob", "catherine", "daniel"]
+        let xs = TestableIterable(xArr)
+        let yArr = [5, 3, 9]
+        let ys = TestableIterable(yArr)
+        
+        let cs = xs ⛙ ys
+        XCTAssert(cs.size == 3)
+        for (i, (x, y)) in cs.indexed.swiftSequence {
+            XCTAssert(xArr[i] == x)
+            XCTAssert(yArr[i] == y)
+        }
+        
+        let ds = ys ⛙ xs
+        XCTAssert(cs.size == 3)
+        for (i, (y, x)) in ds.indexed.swiftSequence {
+            XCTAssert(yArr[i] == y)
+            XCTAssert(xArr[i] == x)
+        }
+  }
+    
     func testConcatenate() {
         let xArr = ["alice", "bob", "catherine", "daniel"]
         let yArr = ["alice", "bob", "catherine", "daniel"]
@@ -132,6 +183,20 @@ class IterableTests: XCTestCase {
         
         let ds = xs ++ ys
         XCTAssert(ds.toArray() == zArr)
+    }
+    
+    
+    
+    func testTo() {
+        let xs: TestableIterable<String> = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        let arr: ArraySeq<String> = xs.to(ArraySeq.newBuilder())
+        XCTAssert(xs.toArray() == arr.toArray())
+    }
+    
+    func testCreateIterableFromIterator() {
+        let iterator = TestableIterator(["a", "b"])
+        let iterable = IterableOf(iterator)
+        XCTAssert(iterable.toArray() == ["a", "b"])
     }
 
 }

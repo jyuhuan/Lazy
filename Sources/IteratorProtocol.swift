@@ -6,13 +6,6 @@
 //  Copyright © 2017 Yuhuan Jiang. All rights reserved.
 //
 
-extension IteratorProtocol {
-    static func from(array: Array<Self.Element>) -> AnyIterator<Self.Element> {
-        return AnyIterator(ArraySeq(elements: array).makeIterator())
-    }
-}
-
-
 /// An empty iterator which contains no element.
 ///
 /// - Todo: Would be so much better if we could define a dummy iterator as follows
