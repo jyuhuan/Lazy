@@ -4,4 +4,4 @@ script:
   - xcrun xcodebuild -project Lazy.xcodeproj -scheme Lazy-macOS test
   - swift build
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -J 'Lazy'
