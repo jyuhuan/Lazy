@@ -1,4 +1,4 @@
 ignore:
-  - "Tests/.*"
-  - "Tests/LazyTests/ArrayTests.swift"
-  - "./LazyTests.xctest.coverage.txt"
+  - Tests/.*
+  - .*Tests.m
+  - .*Tests.swift
