@@ -21,7 +21,8 @@ extension IteratorProtocol {
 ///         mutating func next() -> Never? { fatalError("Cannot call next on an empty iterator!") }
 ///     }
 ///
-///  But this makes Swift 4 compiler crash.
+///  But this makes Swift 4 compiler crash (see [SR-6045](https://bugs.swift.org/browse/SR-6045)).
+///
 class EmptyIterator<T>: IteratorProtocol {
     typealias Element = T
     func next() -> T? { return nil }
