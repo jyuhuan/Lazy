@@ -164,47 +164,6 @@ class GroupedConsecutivelyByIterator<Iterator: IteratorProtocol, Key: Equatable 
     }
 }
 
-
-//class GroupedConsecutivelyByIterator<Iterator: IteratorProtocol, Key: Equatable & Defaultable>: IteratorProtocol {
-//    typealias Element = AnyIterator<Iterator.Element>
-//
-//    let f: (Iterator.Element) -> Key
-//    var it: Iterator
-//    var key: Key
-//    var g: Array<Iterator.Element>
-//    var buf: Array<Iterator.Element>
-//
-//
-//    init(_ it: Iterator, _ f: @escaping (Iterator.Element) -> Key) {
-//        self.f = f
-//        self.it = it
-//        self.key = Key.defaultValue()
-//        self.g = Array<Iterator.Element>()
-//        self.buf = Array<Iterator.Element>()
-//    }
-//
-//    func next() -> AnyIterator<Iterator.Element>? {
-//        while let cur = it.next() {
-//            let curKey = f(cur)
-//            if key == curKey || buf.isEmpty {
-//                buf.append(cur)
-//            }
-//            else {
-//                g = buf  // Note: Swift Arrays are values, not references
-//                buf.removeAll()
-//                buf.append(cur)
-//                return AnyIterator(g.makeIterator())
-//            }
-//        }
-//        if (!buf.isEmpty) {
-//            g = buf
-//            buf.removeAll()
-//            return AnyIterator(g.makeIterator())
-//        }
-//        return nil
-//    }
-//}
-
 class ZippedIterator<Iterator1: IteratorProtocol, Iterator2: IteratorProtocol>: IteratorProtocol {
     typealias Element = (Iterator1.Element, Iterator2.Element)
     

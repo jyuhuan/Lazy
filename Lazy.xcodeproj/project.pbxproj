@@ -22,6 +22,9 @@
 		96B5897F1F81867D00EC02EC /* ArraySetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B5897E1F81867D00EC02EC /* ArraySetTests.swift */; };
 		96B5CC801F84AD2100DACD3F /* IterableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B5CC7F1F84AD2100DACD3F /* IterableTests.swift */; };
 		96B5CC851F84C0EB00DACD3F /* BuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B5CC841F84C0EB00DACD3F /* BuilderTests.swift */; };
+		96B5CC891F84C5E400DACD3F /* DefaultableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B5CC881F84C5E400DACD3F /* DefaultableTests.swift */; };
+		96B5CC8B1F84C70800DACD3F /* FactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B5CC8A1F84C70800DACD3F /* FactoryTests.swift */; };
+		96B5CC8E1F84C76800DACD3F /* SeqFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B5CC8D1F84C76800DACD3F /* SeqFactoryTests.swift */; };
 		96DAC1BC1F81682600C06008 /* MapProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DAC1BB1F81682600C06008 /* MapProtocol.swift */; };
 		96DAC1BE1F81683100C06008 /* SetProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DAC1BD1F81683100C06008 /* SetProtocol.swift */; };
 		96DAC1C31F81764400C06008 /* ArrayMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DAC1C21F81764400C06008 /* ArrayMap.swift */; };
@@ -55,6 +58,9 @@
 		96B5897E1F81867D00EC02EC /* ArraySetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArraySetTests.swift; sourceTree = "<group>"; };
 		96B5CC7F1F84AD2100DACD3F /* IterableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IterableTests.swift; sourceTree = "<group>"; };
 		96B5CC841F84C0EB00DACD3F /* BuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuilderTests.swift; sourceTree = "<group>"; };
+		96B5CC881F84C5E400DACD3F /* DefaultableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultableTests.swift; sourceTree = "<group>"; };
+		96B5CC8A1F84C70800DACD3F /* FactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactoryTests.swift; sourceTree = "<group>"; };
+		96B5CC8D1F84C76800DACD3F /* SeqFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeqFactoryTests.swift; sourceTree = "<group>"; };
 		96DAC1BB1F81682600C06008 /* MapProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapProtocol.swift; sourceTree = "<group>"; };
 		96DAC1BD1F81683100C06008 /* SetProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProtocol.swift; sourceTree = "<group>"; };
 		96DAC1C21F81764400C06008 /* ArrayMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayMap.swift; sourceTree = "<group>"; };
@@ -119,6 +125,16 @@
 			path = Tests/LazyTests/Builders;
 			sourceTree = SOURCE_ROOT;
 		};
+		96B5CC8C1F84C70E00DACD3F /* Factories */ = {
+			isa = PBXGroup;
+			children = (
+				96B5CC8D1F84C76800DACD3F /* SeqFactoryTests.swift */,
+				96B5CC8A1F84C70800DACD3F /* FactoryTests.swift */,
+			);
+			name = Factories;
+			path = Tests/LazyTests/Factories;
+			sourceTree = SOURCE_ROOT;
+		};
 		96DAC1C11F8175F300C06008 /* Mutable */ = {
 			isa = PBXGroup;
 			children = (
@@ -138,6 +154,8 @@
 		OBJ_11 /* LazyTests */ = {
 			isa = PBXGroup;
 			children = (
+				96B5CC8C1F84C70E00DACD3F /* Factories */,
+				96B5CC881F84C5E400DACD3F /* DefaultableTests.swift */,
 				96B5CC811F84C07300DACD3F /* Builders */,
 				96B5CC7F1F84AD2100DACD3F /* IterableTests.swift */,
 				96B5897E1F81867D00EC02EC /* ArraySetTests.swift */,
@@ -255,7 +273,10 @@
 				96B5CC801F84AD2100DACD3F /* IterableTests.swift in Sources */,
 				96B5CC851F84C0EB00DACD3F /* BuilderTests.swift in Sources */,
 				96B589791F8180A300EC02EC /* ArrayMapTests.swift in Sources */,
+				96B5CC8E1F84C76800DACD3F /* SeqFactoryTests.swift in Sources */,
+				96B5CC8B1F84C70800DACD3F /* FactoryTests.swift in Sources */,
 				OBJ_27 /* ArraySeqTests.swift in Sources */,
+				96B5CC891F84C5E400DACD3F /* DefaultableTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
