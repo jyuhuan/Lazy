@@ -108,19 +108,29 @@ extension IterableProtocol {
         get { return IndexedIterable(self) }
     }
     
-    var reversed: ReversedIterable<Self> {
-        get { fatalError() }
-    }
+}
+
+
+// MARK: - Interaction with Other Iterables
+extension IterableProtocol {
     
     func zipped<That: IterableProtocol>(with that: That) -> ZippedIterable<Self, That> {
         return ZippedIterable(self, that)
     }
-    func zip<That: IterableProtocol>(with that: That) -> ZippedIterable<Self, That> {
+    
+    func zip<That: IterableProtocol>(_ that: That) -> ZippedIterable<Self, That> {
         return zipped(with: that)
     }
-
+    
+    func concatenated(with that: Self) -> ConcatenatedIterable<Self> {
+        return ConcatenatedIterable(self, that)
+    }
+    
+    func concatenate(_ that: Self) -> ConcatenatedIterable<Self> {
+        return concatenated(with: that)
+    }
+    
 }
-
 
 // Conversions
 extension IterableProtocol {
@@ -291,6 +301,22 @@ class ZippedIterable<Iterable1: IterableProtocol, Iterable2: IterableProtocol>: 
     }
 }
 
+class ConcatenatedIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = ConcatenatedIterator<Iterable.Iterator>
+    
+    let i1: Iterable
+    let i2: Iterable
+    
+    init(_ i1: Iterable, _ i2: Iterable) {
+        self.i1 = i1
+        self.i2 = i2
+    }
+    
+    func makeIterator() -> ConcatenatedIterator<Iterable.Iterator> {
+        return ConcatenatedIterator(i1.makeIterator(), i2.makeIterator())
+    }
+}
 
 // Conversion from Lazy iterables to Swift Sequences, so that the for-in syntax can be used.
 
@@ -341,3 +367,18 @@ class AnyIterable<I: IteratorProtocol>: IterableProtocol {
         return makeIteratorImpl()
     }
 }
+
+
+// Operators
+infix operator ++
+infix operator ⛙
+
+extension IterableProtocol {
+    static func ++ (this: Self, that: Self) -> ConcatenatedIterable<Self> {
+        return this.concatenated(with: that)
+    }
+    static func ⛙ <That: IterableProtocol> (this: Self, that: That) -> ZippedIterable<Self, That> {
+        return this.zipped(with: that)
+    }
+}
+

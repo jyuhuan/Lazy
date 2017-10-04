@@ -13,13 +13,16 @@ extension IteratorProtocol {
 }
 
 
-
-/// -Todo: Would be so much better if this is defined as
+/// An empty iterator which contains no element.
 ///
-///     struct EmptyIterator: IteratorProtocol {
-///         typealias Element = Never
-///         mutating func next() -> Never? { fatalError("Cannot call next on an empty iterator!") }
-///     }
+/// - Todo: Would be so much better if we could define a dummy iterator as follows
+///
+///       struct DummyIterator: IteratorProtocol {
+///           typealias Element = Never
+///           mutating func next() -> Never? {
+///               fatalError("Cannot call next on a dummy iterator!")
+///           }
+///       }
 ///
 ///  But this makes Swift 4 compiler crash (see [SR-6045](https://bugs.swift.org/browse/SR-6045)).
 ///
@@ -28,7 +31,7 @@ class EmptyIterator<T>: IteratorProtocol {
     func next() -> T? { return nil }
 }
 
-/// The iterator in the iterable returned by the property `indexed`
+
 class IndexedIterator<OldIterator: IteratorProtocol>: IteratorProtocol {
     
     typealias Element = (Int, OldIterator.Element)
@@ -50,7 +53,7 @@ class IndexedIterator<OldIterator: IteratorProtocol>: IteratorProtocol {
     
 }
 
-/// The iterator in the iterable returned by the method `mapped:by`.
+
 class MappedIterator<OldIterator: IteratorProtocol, NewElement>: IteratorProtocol {
     
     typealias Element = NewElement
@@ -156,7 +159,7 @@ class GroupedConsecutivelyByIterator<Iterator: IteratorProtocol, Key: Equatable 
                 return AnyIterable(g)
             }
         }
-        if (!buf.isEmpty) {
+        if (buf.notEmpty) {
             g = buf.clone()
             buf.clear()
             return AnyIterable(g)
@@ -184,3 +187,23 @@ class ZippedIterator<Iterator1: IteratorProtocol, Iterator2: IteratorProtocol>: 
         return (e1!, e2!)
     }
  }
+
+class ConcatenatedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var i1: Iterator
+    var i2: Iterator
+    
+    init(_ i1: Iterator, _ i2: Iterator) {
+        self.i1 = i1
+        self.i2 = i2
+    }
+    
+    func next() -> Iterator.Element? {
+        let e1 = i1.next()
+        if e1 != nil { return e1 }
+        let e2 = i2.next()
+        return e2 == nil ? nil : e2
+    }
+}
+

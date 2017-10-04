@@ -79,5 +79,59 @@ class IterableTests: XCTestCase {
         XCTAssert(ds.toArray() == ["catherine", "daniel"])
         XCTAssert(es.toArray() == ["catherine", "daniel"])
     }
+    
+    
+    
+    func testIndexed() {
+        let arr = ["alice", "bob", "catherine", "daniel"]
+        let xs = TestableIterable(arr)
+        for (i, x) in xs.indexed.swiftSequence {
+            XCTAssert(arr[i] == x)
+        }
+    }
+    
+    func testZip() {
+        let xArr = ["alice", "bob", "catherine", "daniel"]
+        let xs = TestableIterable(xArr)
+        let yArr = [5, 3, 9, 6]
+        let ys = TestableIterable(yArr)
+        
+        let bs = xs.zipped(with: ys)
+        for (i, (x, y)) in bs.indexed.swiftSequence {
+            XCTAssert(xArr[i] == x)
+            XCTAssert(yArr[i] == y)
+        }
+        
+        let cs = xs.zip(ys)
+        for (i, (x, y)) in cs.indexed.swiftSequence {
+            XCTAssert(xArr[i] == x)
+            XCTAssert(yArr[i] == y)
+        }
+        
+        let ds = xs ⛙ ys
+        for (i, (x, y)) in ds.indexed.swiftSequence {
+            XCTAssert(xArr[i] == x)
+            XCTAssert(yArr[i] == y)
+        }
+    }
+    
+    func testConcatenate() {
+        let xArr = ["alice", "bob", "catherine", "daniel"]
+        let yArr = ["alice", "bob", "catherine", "daniel"]
+        let zArr = xArr + yArr
+        
+        let xs = TestableIterable(xArr)
+        let ys = TestableIterable(yArr)
+        
+        
+        let bs = xs.concatenated(with: ys)
+        XCTAssert(bs.toArray() == zArr)
+        
+        let cs = xs.concatenate(ys)
+        XCTAssert(cs.toArray() == zArr)
+        
+        let ds = xs ++ ys
+        XCTAssert(ds.toArray() == zArr)
+    }
 
 }
