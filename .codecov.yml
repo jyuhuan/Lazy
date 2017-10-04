@@ -1,4 +1,4 @@
-ignore:
-  - Tests/.*
-  - .*Tests.m
-  - .*Tests.swift
+coverage:
+  ignore:
+    - Tests/.*
+    - .*Tests.swift
