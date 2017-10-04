@@ -6,3 +6,7 @@
 # Lazy
 
 A library of generic lazy collections for Swift.
+
+## Acknowledgement
+
+Lazy is based largely on [poly-collection](https://github.com/ctongfei/poly-collection).
