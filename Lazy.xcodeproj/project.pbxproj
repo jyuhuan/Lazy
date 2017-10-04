@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		966754351F801E8A00F2DD05 /* ArraySeq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9693B24C1F801E0C0069489F /* ArraySeq.swift */; };
 		966754361F801E8A00F2DD05 /* Range.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9693B24D1F801E0C0069489F /* Range.swift */; };
-		966754371F801E8A00F2DD05 /* Iterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9693B2501F801E0C0069489F /* Iterable.swift */; };
-		966754381F801E8A00F2DD05 /* Iterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9693B2511F801E0C0069489F /* Iterator.swift */; };
+		966754371F801E8A00F2DD05 /* IterableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9693B2501F801E0C0069489F /* IterableProtocol.swift */; };
+		966754381F801E8A00F2DD05 /* IteratorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9693B2511F801E0C0069489F /* IteratorProtocol.swift */; };
 		9667543B1F801E8A00F2DD05 /* RandomAccessSeqProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9693B24F1F801E0C0069489F /* RandomAccessSeqProtocol.swift */; };
 		9667543C1F801E8A00F2DD05 /* SeqProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9693B2521F801E0C0069489F /* SeqProtocol.swift */; };
 		966754401F801F9900F2DD05 /* Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9667543F1F801F9900F2DD05 /* Factory.swift */; };
@@ -49,8 +49,8 @@
 		9693B24C1F801E0C0069489F /* ArraySeq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArraySeq.swift; sourceTree = "<group>"; };
 		9693B24D1F801E0C0069489F /* Range.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Range.swift; sourceTree = "<group>"; };
 		9693B24F1F801E0C0069489F /* RandomAccessSeqProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomAccessSeqProtocol.swift; sourceTree = "<group>"; };
-		9693B2501F801E0C0069489F /* Iterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Iterable.swift; sourceTree = "<group>"; };
-		9693B2511F801E0C0069489F /* Iterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Iterator.swift; sourceTree = "<group>"; };
+		9693B2501F801E0C0069489F /* IterableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IterableProtocol.swift; sourceTree = "<group>"; };
+		9693B2511F801E0C0069489F /* IteratorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IteratorProtocol.swift; sourceTree = "<group>"; };
 		9693B2521F801E0C0069489F /* SeqProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeqProtocol.swift; sourceTree = "<group>"; };
 		96A0D3091F82A58C0030A3C8 /* Defaultable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaultable.swift; sourceTree = "<group>"; };
 		96B589781F8180A300EC02EC /* ArrayMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayMapTests.swift; sourceTree = "<group>"; };
@@ -191,8 +191,8 @@
 				966754411F80204800F2DD05 /* Builders */,
 				9667543D1F801F4800F2DD05 /* Factories */,
 				9693B24B1F801E0C0069489F /* Implementations */,
-				9693B2501F801E0C0069489F /* Iterable.swift */,
-				9693B2511F801E0C0069489F /* Iterator.swift */,
+				9693B2501F801E0C0069489F /* IterableProtocol.swift */,
+				9693B2511F801E0C0069489F /* IteratorProtocol.swift */,
 				9693B24F1F801E0C0069489F /* RandomAccessSeqProtocol.swift */,
 				9693B2521F801E0C0069489F /* SeqProtocol.swift */,
 				96DAC1BB1F81682600C06008 /* MapProtocol.swift */,
@@ -285,10 +285,10 @@
 			buildActionMask = 0;
 			files = (
 				966754351F801E8A00F2DD05 /* ArraySeq.swift in Sources */,
-				966754371F801E8A00F2DD05 /* Iterable.swift in Sources */,
+				966754371F801E8A00F2DD05 /* IterableProtocol.swift in Sources */,
 				966754361F801E8A00F2DD05 /* Range.swift in Sources */,
 				96DAC1BC1F81682600C06008 /* MapProtocol.swift in Sources */,
-				966754381F801E8A00F2DD05 /* Iterator.swift in Sources */,
+				966754381F801E8A00F2DD05 /* IteratorProtocol.swift in Sources */,
 				966754451F802C1F00F2DD05 /* SeqFactory.swift in Sources */,
 				966754401F801F9900F2DD05 /* Factory.swift in Sources */,
 				9667543C1F801E8A00F2DD05 /* SeqProtocol.swift in Sources */,
