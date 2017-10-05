@@ -200,3 +200,56 @@ class ConcatenatedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
     }
 }
 
+class InterleavedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var i1: Iterator
+    var i2: Iterator
+    var shouldReturnFrom1: Bool
+    
+    init(_ i1: Iterator, _ i2: Iterator) {
+        self.i1 = i1
+        self.i2 = i2
+        self.shouldReturnFrom1 = true
+    }
+    
+    func next() -> Iterator.Element? {
+        if shouldReturnFrom1 {
+            shouldReturnFrom1 = false
+            return i1.next()
+        }
+        else {
+            shouldReturnFrom1 = true
+            return i2.next()
+        }
+    }
+}
+
+
+class PrependedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var i: Iterator
+    let e: Element
+    var isFirst: Bool
+    
+    init(_ i: Iterator, _ e: Element) {
+        self.i = i
+        self.e = e
+        self.isFirst = true
+    }
+    
+    func next() -> Element? {
+        if isFirst {
+            isFirst = false
+            return e
+        }
+        else {
+            return i.next()
+        }
+    }
+}
+
+
+
+

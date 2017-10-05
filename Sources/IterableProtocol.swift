@@ -130,6 +130,24 @@ extension IterableProtocol {
         return concatenated(with: that)
     }
     
+    func interleaved(with that: Self) -> InterleavedIterable<Self> {
+        return InterleavedIterable(self, that)
+    }
+    
+    func interleave(_ that: Self) -> InterleavedIterable<Self> {
+        return interleaved(with: that)
+    }
+    
+}
+
+
+// MARK: - Interaction with Pther Elements
+extension IterableProtocol {
+    
+    func prepended(with element: Element) -> PrependedIterable<Self> {
+        return PrependedIterable(self, element)
+    }
+    
 }
 
 // Conversions
@@ -273,9 +291,6 @@ class GroupedConsecutivelyByIterable<Iterable: IterableProtocol, Key: Equatable 
 
 }
 
-class ReversedIterable<OldIterable: IterableProtocol>/* : IterableProtocol */ {
-}
-
 class ZippedIterable<Iterable1: IterableProtocol, Iterable2: IterableProtocol>: IterableProtocol {
     typealias Element = (Iterable1.Element, Iterable2.Element)
     typealias Iterator = ZippedIterator<Iterable1.Iterator, Iterable2.Iterator>
@@ -309,6 +324,43 @@ class ConcatenatedIterable<Iterable: IterableProtocol>: IterableProtocol {
         return ConcatenatedIterator(i1.makeIterator(), i2.makeIterator())
     }
 }
+
+class InterleavedIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = InterleavedIterator<Iterable.Iterator>
+    
+    let i1: Iterable
+    let i2: Iterable
+    
+    init(_ i1: Iterable, _ i2: Iterable) {
+        self.i1 = i1
+        self.i2 = i2
+    }
+
+    func makeIterator() -> InterleavedIterator<Iterable.Iterator> {
+        return InterleavedIterator(i1.makeIterator(), i2.makeIterator())
+    }
+
+}
+
+
+class PrependedIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = PrependedIterator<Iterable.Iterator>
+    
+    let i: Iterable
+    let e: Element
+
+    init(_ i: Iterable, _ e: Element) {
+        self.i = i
+        self.e = e
+    }
+    
+    func makeIterator() -> PrependedIterator<Iterable.Iterator> {
+        return PrependedIterator(i.makeIterator(), e)
+    }
+}
+
 
 // Conversion from Lazy iterables to Swift Sequences, so that the for-in syntax can be used.
 
@@ -364,13 +416,23 @@ class AnyIterable<I: IteratorProtocol>: IterableProtocol {
 // Operators
 infix operator ++
 infix operator ⛙
+infix operator |>
+infix operator +/
+
 
 extension IterableProtocol {
+    
     static func ++ (this: Self, that: Self) -> ConcatenatedIterable<Self> {
         return this.concatenated(with: that)
     }
+    
     static func ⛙ <That: IterableProtocol> (this: Self, that: That) -> ZippedIterable<Self, That> {
         return this.zipped(with: that)
     }
+    
+    static func +/ (element: Element, iterable: Self) -> PrependedIterable<Self> {
+        return iterable.prepended(with: element)
+    }
+    
 }
 

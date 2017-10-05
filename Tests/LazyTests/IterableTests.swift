@@ -164,7 +164,7 @@ class IterableTests: XCTestCase {
             XCTAssert(yArr[i] == y)
             XCTAssert(xArr[i] == x)
         }
-  }
+    }
     
     func testConcatenate() {
         let xArr = ["alice", "bob", "catherine", "daniel"]
@@ -183,6 +183,23 @@ class IterableTests: XCTestCase {
         
         let ds = xs ++ ys
         XCTAssert(ds.toArray() == zArr)
+    }
+    
+    
+    func testInterleave() {
+        let xs = TestableIterable([1, 3, 5, 7])
+        let ys = TestableIterable([2, 4, 6])
+        let zs = xs.interleave(ys)
+        XCTAssert(zs.toArray() == [1, 2, 3, 4, 5, 6, 7])
+    }
+    
+    func testPrepend() {
+        let xArr = ["alice", "bob", "catherine", "daniel"]
+        let yArr = ["zapfino"] + xArr
+        
+        let xs = TestableIterable(xArr)
+        let ys = "zapfino" +/ xs
+        XCTAssert(ys.toArray() == yArr)
     }
     
     
