@@ -195,20 +195,34 @@ class IterableTests: XCTestCase {
     
     func testPrepend() {
         let xArr = ["alice", "bob", "catherine", "daniel"]
-        let yArr = ["zapfino"] + xArr
+        let expectedARr = ["zapfino"] + xArr
         
         let xs = TestableIterable(xArr)
-        let ys = "zapfino" +| xs
-        XCTAssert(ys.toArray() == yArr)
+        
+        let bs = "zapfino" +| xs
+        XCTAssert(bs.toArray() == expectedARr)
+        
+        let cs = xs.prepend("zapfino")
+        XCTAssert(cs.toArray() == expectedARr)
+        
+        let ds = xs.prepended(with: "zapfino")
+        XCTAssert(ds.toArray() == expectedARr)
     }
     
     func testAppend() {
         let xArr = ["alice", "bob", "catherine", "daniel"]
-        let yArr = xArr + ["zapfino"]
+        let expectedArr = xArr + ["zapfino"]
         
         let xs = TestableIterable(xArr)
-        let ys = xs |+ "zapfino"
-        XCTAssert(ys.toArray() == yArr)
+        
+        let bs = xs |+ "zapfino"
+        XCTAssert(bs.toArray() == expectedArr)
+        
+        let cs = xs.append("zapfino")
+        XCTAssert(cs.toArray() == expectedArr)
+        
+        let ds = xs.appended(with: "zapfino")
+        XCTAssert(ds.toArray() == expectedArr)
     }
     
     func testInsert() {
@@ -230,6 +244,10 @@ class IterableTests: XCTestCase {
         let emptyIterable = TestableIterable<String>([])
         let es = emptyIterable.with(element: "zapfino", insertedAt: 0)
         XCTAssert(es.toArray() == ["zapfino"])
+        
+        // Test insert shorthand
+        let fs = xs.insert("zapfino", 2)
+        XCTAssert(fs.toArray() == ["alice", "bob", "zapfino", "catherine", "daniel"])
     }
     
     func testHead() {
