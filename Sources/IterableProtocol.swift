@@ -170,6 +170,42 @@ extension IterableProtocol {
     
 }
 
+
+// MARK: - Sequence Operations
+extension IterableProtocol {
+    
+    var head: Element? {
+        get {
+            var iter = self.makeIterator()
+            return iter.next()
+        }
+    }
+    
+    var tail: TailIterable<Self> {
+        get {
+            return TailIterable(self)
+        }
+    }
+    
+    var fore: ForeIterable<Self> {
+        get {
+            return ForeIterable(self)
+        }
+    }
+    
+    var last: Element? {
+        get {
+            var x: Element? = nil
+            var iter = self.makeIterator()
+            while let n = iter.next() {
+                x = n
+            }
+            return x
+        }
+    }
+}
+
+
 // Conversions
 extension IterableProtocol {
     
@@ -414,6 +450,37 @@ class InsertedIterable<Iterable: IterableProtocol>: IterableProtocol {
     
     func makeIterator() -> Iterator {
         return InsertedIterator(i.makeIterator(), e, idx)
+    }
+}
+
+
+class TailIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = TailIterator<Iterable.Iterator>
+    
+    let iter: Iterable
+    
+    init(_ iter: Iterable) {
+        self.iter = iter
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator())
+    }
+}
+
+class ForeIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = ForeIterator<Iterable.Iterator>
+    
+    let iter: Iterable
+    
+    init(_ iter: Iterable) {
+        self.iter = iter
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator())
     }
 }
 

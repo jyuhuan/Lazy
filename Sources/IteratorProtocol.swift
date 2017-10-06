@@ -298,6 +298,50 @@ class InsertedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
     }
 }
 
+class TailIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var iter: Iterator
+    var isFirst: Bool
+    
+    init(_ i: Iterator) {
+        self.iter = i
+        self.isFirst = true
+    }
+    
+    func next() -> Element? {
+        if isFirst {
+            isFirst = false
+            let n = iter.next()
+            if n == nil { return nil }
+            return iter.next()
+        }
+        return iter.next()
+    }
+}
 
-
+class ForeIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var iter: Iterator
+    var prefetched: Element?
+    
+    init(_ iter: Iterator) {
+        self.iter = iter
+        self.prefetched = self.iter.next()
+    }
+    
+    func next() -> Element? {
+        if prefetched == nil {
+            return nil
+        }
+        
+        let element = prefetched!
+        prefetched = iter.next()
+        if prefetched == nil {
+            return nil
+        }
+        return element
+    }
+}
 

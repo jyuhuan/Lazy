@@ -232,6 +232,67 @@ class IterableTests: XCTestCase {
         XCTAssert(es.toArray() == ["zapfino"])
     }
     
+    func testHead() {
+        // Head of a normal iterable
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.head! == "alice")
+        
+        // Head of an iterable with just one element
+        let ys = TestableIterable(["alice"])
+        XCTAssert(ys.head! == "alice")
+        
+        // Head of an empty iterable
+        let zs = TestableIterable<String>([])
+        XCTAssert(zs.head == nil)
+    }
+    
+    func testTail() {
+        // Tail of a normal iterable
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        let xsTail = xs.tail
+        XCTAssert(xsTail.toArray() == ["bob", "catherine", "daniel"])
+        
+        // Tail of an iterable with just one element
+        let ys = TestableIterable(["alice"])
+        let ysTail = ys.tail
+        XCTAssert(ysTail.toArray() == [])
+        
+        // Tail of an empty iterable
+        let zs = TestableIterable<String>([])
+        let zsTail = zs.tail
+        XCTAssert(zsTail.toArray() == [])
+    }
+    
+    func testFore() {
+        // Fore of a normal iterable
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        let xsFore = xs.fore
+        XCTAssert(xsFore.toArray() == ["alice", "bob", "catherine"])
+        
+        // Fore of an iterable with just one element
+        let ys = TestableIterable(["alice"])
+        let ysFore = ys.fore
+        XCTAssert(ysFore.toArray() == [])
+        
+        // Fore of an empty iterable
+        let zs = TestableIterable<String>([])
+        let zsFore = zs.fore
+        XCTAssert(zsFore.toArray() == [])
+    }
+    
+    func testLast() {
+        // Last of a normal iterable
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.last! == "daniel")
+        
+        // Last of an iterable with just one element
+        let ys = TestableIterable(["daniel"])
+        XCTAssert(ys.last! == "daniel")
+        
+        // Last of an empty iterable
+        let zs = TestableIterable<String>([])
+        XCTAssert(zs.last == nil)
+    }
     
     func testTo() {
         let xs: TestableIterable<String> = TestableIterable(["alice", "bob", "catherine", "daniel"])
