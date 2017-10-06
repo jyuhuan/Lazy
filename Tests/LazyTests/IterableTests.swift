@@ -211,6 +211,27 @@ class IterableTests: XCTestCase {
         XCTAssert(ys.toArray() == yArr)
     }
     
+    func testInsert() {
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        
+        // A regular insert
+        let bs = xs.with(element: "zapfino", insertedAt: 2)
+        XCTAssert(bs.toArray() == ["alice", "bob", "zapfino", "catherine", "daniel"])
+        
+        // Insert at the front
+        let cs = xs.with(element: "zapfino", insertedAt: 0)
+        XCTAssert(cs.toArray() == ["zapfino", "alice", "bob", "catherine", "daniel"])
+
+        // Insert at the end
+        let ds = xs.with(element: "zapfino", insertedAt: xs.size)
+        XCTAssert(ds.toArray() == ["alice", "bob", "catherine", "daniel", "zapfino"])
+
+        // Insert into an empty iterator
+        let emptyIterable = TestableIterable<String>([])
+        let es = emptyIterable.with(element: "zapfino", insertedAt: 0)
+        XCTAssert(es.toArray() == ["zapfino"])
+    }
+    
     
     func testTo() {
         let xs: TestableIterable<String> = TestableIterable(["alice", "bob", "catherine", "daniel"])
