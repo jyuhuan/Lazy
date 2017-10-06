@@ -148,6 +148,26 @@ extension IterableProtocol {
         return PrependedIterable(self, element)
     }
     
+    func prepend(_ element: Element) -> PrependedIterable<Self> {
+        return prepended(with: element)
+    }
+    
+    func appended(with element: Element) -> AppendedIterable<Self> {
+        return AppendedIterable(self, element)
+    }
+    
+    func append(_ element: Element) -> AppendedIterable<Self> {
+        return appended(with: element)
+    }
+    
+    func with(element: Element, insertedAt index: Int) -> InsertedIterable<Self> {
+        return InsertedIterable(self, element, index)
+    }
+    
+    func insert(_ element: Element, _ index: Int) -> InsertedIterable<Self> {
+        return with(element: element, insertedAt: index)
+    }
+    
 }
 
 // Conversions
@@ -361,6 +381,42 @@ class PrependedIterable<Iterable: IterableProtocol>: IterableProtocol {
     }
 }
 
+class AppendedIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = AppendedIterator<Iterable.Iterator>
+    
+    let i: Iterable
+    let e: Element
+    
+    init(_ i: Iterable, _ e: Element) {
+        self.i = i
+        self.e = e
+    }
+    
+    func makeIterator() -> AppendedIterator<Iterable.Iterator> {
+        return AppendedIterator(i.makeIterator(), e)
+    }
+}
+
+class InsertedIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = InsertedIterator<Iterable.Iterator>
+    
+    let i: Iterable
+    let e: Element
+    let idx: Int
+    
+    init(_ i: Iterable, _ e: Element, _ idx: Int) {
+        self.i = i
+        self.e = e
+        self.idx = idx
+    }
+    
+    func makeIterator() -> Iterator {
+        return InsertedIterator(i.makeIterator(), e, idx)
+    }
+}
+
 
 // Conversion from Lazy iterables to Swift Sequences, so that the for-in syntax can be used.
 
@@ -417,7 +473,8 @@ class AnyIterable<I: IteratorProtocol>: IterableProtocol {
 infix operator ++
 infix operator ⛙
 infix operator |>
-infix operator +/
+infix operator +|
+infix operator |+
 
 
 extension IterableProtocol {
@@ -430,9 +487,13 @@ extension IterableProtocol {
         return this.zipped(with: that)
     }
     
-    static func +/ (element: Element, iterable: Self) -> PrependedIterable<Self> {
+    static func +| (element: Element, iterable: Self) -> PrependedIterable<Self> {
         return iterable.prepended(with: element)
     }
     
+    static func |+ (iterable: Self, element: Element) -> AppendedIterable<Self> {
+        return iterable.appended(with: element)
+    }
+
 }
 

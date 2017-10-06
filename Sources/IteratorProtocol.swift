@@ -250,6 +250,54 @@ class PrependedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
     }
 }
 
+class AppendedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var i: Iterator
+    let e: Element
+    var isRead: Bool
+    
+    init(_ i: Iterator, _ e: Element) {
+        self.i = i
+        self.e = e
+        self.isRead = false
+    }
+    
+    func next() -> Element? {
+        if isRead { return nil }
+        let x: Optional<Iterator.Element> = i.next()
+        if x == nil {
+            isRead = true
+            return e
+        }
+        else { return x; }
+    }
+}
+
+class InsertedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var i: Iterator
+    let e: Element
+    let idx: Int
+    var curIdx: Int
+    
+    init(_ i: Iterator, _ e: Element, _ idx: Int) {
+        self.i = i
+        self.e = e
+        self.idx = idx
+        self.curIdx = -1
+    }
+    
+    func next() -> Element? {
+        curIdx += 1
+        if curIdx == idx {
+            return e
+        }
+        else { return i.next() }
+    }
+}
+
 
 
 

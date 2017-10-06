@@ -198,10 +198,18 @@ class IterableTests: XCTestCase {
         let yArr = ["zapfino"] + xArr
         
         let xs = TestableIterable(xArr)
-        let ys = "zapfino" +/ xs
+        let ys = "zapfino" +| xs
         XCTAssert(ys.toArray() == yArr)
     }
     
+    func testAppend() {
+        let xArr = ["alice", "bob", "catherine", "daniel"]
+        let yArr = xArr + ["zapfino"]
+        
+        let xs = TestableIterable(xArr)
+        let ys = xs |+ "zapfino"
+        XCTAssert(ys.toArray() == yArr)
+    }
     
     
     func testTo() {
