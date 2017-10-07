@@ -312,6 +312,92 @@ class IterableTests: XCTestCase {
         XCTAssert(zs.last == nil)
     }
     
+    func testTakeFirst() {
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.take(first: 0).toArray() == [])
+        XCTAssert(xs.take(first: 1).toArray() == ["alice"])
+        XCTAssert(xs.take(first: 2).toArray() == ["alice", "bob"])
+        XCTAssert(xs.take(first: 3).toArray() == ["alice", "bob", "catherine"])
+        XCTAssert(xs.take(first: 4).toArray() == ["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.take(first: 5).toArray() == ["alice", "bob", "catherine", "daniel"])
+    }
+
+    func testTakeTo() {
+        // Test an iterable with some elements
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.take(to: {s in s.count >= 6}).toArray() == ["alice", "bob", "catherine"])
+        XCTAssert(xs.take(to: {s in s.count >= 10}).toArray() == ["alice", "bob", "catherine", "daniel"])
+        
+        // Test an empty iterable
+        let ys = TestableIterable<String>([])
+        XCTAssert(ys.take(to: {s in s.count >= 6}).toArray() == [])
+    }
+    
+    func testTakeWhile() {
+        // Test an iterable with some elements
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.take(while: {s in s.count >= 6}).toArray() == ["alice", "bob"])
+        XCTAssert(xs.take(while: {s in s.count >= 10}).toArray() == ["alice", "bob", "catherine", "daniel"])
+        
+        // Test an empty iterable
+        let ys = TestableIterable<String>([])
+        XCTAssert(ys.take(while: {s in s.count >= 6}).toArray() == [])
+    }
+
+    func testTakeUntil() {
+        // Test an iterable with some elements
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.take(until: {s in s.count < 6}).toArray() == ["alice", "bob"])
+        XCTAssert(xs.take(until: {s in s.count < 10}).toArray() == ["alice", "bob", "catherine", "daniel"])
+        
+        // Test an empty iterable
+        let ys = TestableIterable<String>([])
+        XCTAssert(ys.take(until: {s in s.count >= 6}).toArray() == [])
+    }
+    
+    func testDropFirst() {
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.drop(first: 0).toArray() == ["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.drop(first: 1).toArray() == ["bob", "catherine", "daniel"])
+        XCTAssert(xs.drop(first: 2).toArray() == ["catherine", "daniel"])
+        XCTAssert(xs.drop(first: 3).toArray() == ["daniel"])
+        XCTAssert(xs.drop(first: 4).toArray() == [])
+        XCTAssert(xs.drop(first: 5).toArray() == [])
+    }
+    
+    func testDropTo() {
+        // Test an iterable with some elements
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.drop(to: {s in s.count >= 6}).toArray() == ["daniel"])
+        XCTAssert(xs.drop(to: {s in s.count >= 10}).toArray() == [])
+        
+        // Test an empty iterable
+        let ys = TestableIterable<String>([])
+        XCTAssert(ys.drop(to: {s in s.count >= 6}).toArray() == [])
+    }
+    
+    func testDropWhile() {
+        // Test an iterable with some elements
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.drop(while: {s in s.count < 6}).toArray() == ["catherine", "daniel"])
+        XCTAssert(xs.drop(while: {s in s.count < 10}).toArray() == [])
+        
+        // Test an empty iterable
+        let ys = TestableIterable<String>([])
+        XCTAssert(ys.drop(while: {s in s.count < 6}).toArray() == [])
+    }
+
+    func testDropUntil() {
+        // Test an iterable with some elements
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
+        XCTAssert(xs.drop(until: {s in s.count >= 6}).toArray() == ["catherine", "daniel"])
+        XCTAssert(xs.drop(until: {s in s.count >= 10}).toArray() == [])
+        
+        // Test an empty iterable
+        let ys = TestableIterable<String>([])
+        XCTAssert(ys.drop(until: {s in s.count >= 6}).toArray() == [])
+    }
+    
     func testTo() {
         let xs: TestableIterable<String> = TestableIterable(["alice", "bob", "catherine", "daniel"])
         let arr: ArraySeq<String> = xs.to(ArraySeq.newBuilder())

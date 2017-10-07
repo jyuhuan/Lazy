@@ -345,3 +345,210 @@ class ForeIterator<Iterator: IteratorProtocol>: IteratorProtocol {
     }
 }
 
+class RightInclusiveSliceIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var iter: Iterator
+    var l: Int
+    var r: Int
+    var curIdx: Int
+    var isFirst: Bool
+    
+    init(_ iter: Iterator, _ l: Int, _ r: Int) {
+        self.iter = iter
+        self.l = l
+        self.r = r
+        self.curIdx = -1
+        self.isFirst = true
+    }
+    
+    func next() -> Element? {
+        if isFirst {
+            var n: Element? = nil
+            while curIdx < l {
+                curIdx += 1
+                n = iter.next()
+            }
+            return n
+        }
+        else {
+            curIdx += 1
+            return curIdx < r ? iter.next() : nil
+        }
+    }
+}
+
+
+class RightExclusiveSliceIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var iter: Iterator
+    var l: Int
+    var r: Int
+    var curIdx: Int
+    var isFirst: Bool
+    
+    init(_ iter: Iterator, _ l: Int, _ r: Int) {
+        self.iter = iter
+        self.l = l
+        self.r = r
+        self.curIdx = -1
+        self.isFirst = true
+    }
+    
+    func next() -> Element? {
+        if isFirst {
+            var n: Element? = nil
+            while curIdx < l {
+                curIdx += 1
+                n = iter.next()
+            }
+            return n
+        }
+        else {
+            curIdx += 1
+            return curIdx < r ? iter.next() : nil
+        }
+    }
+}
+
+class TakeFirstIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var iter: Iterator
+    var remainingCount: Int
+    
+    init(_ iter: Iterator, _ n: Int) {
+        self.iter = iter
+        self.remainingCount = n
+    }
+    
+    func next() -> Element? {
+        let n = iter.next()
+        if n == nil {
+            return nil
+        }
+        if remainingCount > 0 {
+            remainingCount -= 1
+            return n
+        }
+        return nil
+    }
+}
+
+
+class TakeToIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var iter: Iterator
+    let f: (Element) -> Bool
+    var alreadySatisfied: Bool
+
+    init(_ iter: Iterator, _ f: @escaping (Element) -> Bool) {
+        self.iter = iter
+        self.f = f
+        self.alreadySatisfied = false
+    }
+    
+    func next() -> Element? {
+        let n = iter.next()
+        if alreadySatisfied || n == nil {
+            return nil
+        }
+        if f(n!) {
+            alreadySatisfied = true
+        }
+        return n
+    }
+}
+
+class TakeWhileIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var iter: Iterator
+    let f: (Element) -> Bool
+    
+    init(_ iter: Iterator, _ f: @escaping (Element) -> Bool) {
+        self.iter = iter
+        self.f = f
+    }
+
+    func next() -> Element? {
+        let n = iter.next()
+        if n == nil || f(n!) {
+            return nil
+        }
+        return n
+    }
+}
+
+class DropFirstIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var iter: Iterator
+    let n: Int
+    var curIdx: Int
+    
+    init(_ iter: Iterator, _ n: Int) {
+        self.iter = iter
+        self.n = n
+        self.curIdx = 0
+    }
+    
+    func next() -> Element? {
+        while curIdx < n && iter.next() != nil {
+            curIdx += 1
+        }
+        return iter.next()
+    }
+}
+
+class DropToIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var iter: Iterator
+    let f: (Element) -> Bool
+    
+    init(_ iter: Iterator, _ f: @escaping (Element) -> Bool) {
+        self.iter = iter
+        self.f = f
+    }
+
+    func next() -> Element? {
+        while let x = iter.next(), !f(x) { }
+        return iter.next()
+    }
+}
+
+class DropWhileIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var iter: Iterator
+    let f: (Element) -> Bool
+    var alreadySatisfied: Bool
+    
+    init(_ iter: Iterator, _ f: @escaping (Element) -> Bool) {
+        self.iter = iter
+        self.f = f
+        alreadySatisfied = false
+    }
+
+    func next() -> Element? {
+        if alreadySatisfied {
+            return iter.next()
+        }
+        else {
+            while true {
+                let next = iter.next()
+                if next == nil {
+                    return nil
+                }
+                if !f(next!) {
+                    alreadySatisfied = true
+                    return next
+                }
+            }
+        }
+    }
+}
+

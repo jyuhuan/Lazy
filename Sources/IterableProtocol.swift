@@ -206,6 +206,53 @@ extension IterableProtocol {
 }
 
 
+// MARK: - Sub-iterable operations
+extension IterableProtocol {
+    
+    func slice(from start: Int, until end: Int) -> RightExclusiveSliceIterable<Self> {
+        return RightExclusiveSliceIterable(self, start, end)
+    }
+    
+    func slice(from start: Int, to end: Int) -> RightInclusiveSliceIterable<Self> {
+        return RightInclusiveSliceIterable(self, start, end)
+    }
+    
+    func take(first n: Int) -> TakeFirstIterable<Self> {
+        return TakeFirstIterable(self, n)
+    }
+    
+    func take(to f: @escaping (Element) -> Bool) -> TakeToIterable<Self> {
+        return TakeToIterable(self, f)
+    }
+    
+    func take(while f: @escaping (Element) -> Bool) -> TakeWhileIterable<Self> {
+        return TakeWhileIterable(self, f)
+    }
+    
+    func take(until f: @escaping (Element) -> Bool) -> TakeWhileIterable<Self> {
+        return TakeWhileIterable(self, {e in !f(e)})
+    }
+
+    
+    func drop(first n: Int) -> DropFirstIterable<Self> {
+        return DropFirstIterable(self, n)
+    }
+    
+    func drop(to f: @escaping (Element) -> Bool) -> DropToIterable<Self> {
+        return DropToIterable(self, f)
+    }
+    
+    func drop(while f: @escaping (Element) -> Bool) -> DropWhileIterable<Self> {
+        return DropWhileIterable(self, f)
+    }
+
+    func drop(until f: @escaping (Element) -> Bool) -> DropWhileIterable<Self> {
+        return DropWhileIterable(self, {e in !f(e)})
+    }
+    
+}
+
+
 // Conversions
 extension IterableProtocol {
     
@@ -483,6 +530,148 @@ class ForeIterable<Iterable: IterableProtocol>: IterableProtocol {
         return Iterator(iter.makeIterator())
     }
 }
+
+
+class RightInclusiveSliceIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = RightInclusiveSliceIterator<Iterable.Iterator>
+    
+    var iter: Iterable
+    var l: Int
+    var r: Int
+    
+    init(_ iter: Iterable, _ l: Int, _ r: Int) {
+        self.iter = iter
+        self.l = l
+        self.r = r
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator(), l, r)
+    }
+}
+
+class RightExclusiveSliceIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = RightExclusiveSliceIterator<Iterable.Iterator>
+    
+    var iter: Iterable
+    var l: Int
+    var r: Int
+    
+    init(_ iter: Iterable, _ l: Int, _ r: Int) {
+        self.iter = iter
+        self.l = l
+        self.r = r
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator(), l, r)
+    }
+}
+
+class TakeFirstIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = TakeFirstIterator<Iterable.Iterator>
+    
+    var iter: Iterable
+    let n : Int
+    
+    init(_ iter: Iterable, _ n: Int) {
+        self.iter = iter
+        self.n = n
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator(), n)
+    }
+}
+
+class TakeToIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = TakeToIterator<Iterable.Iterator>
+    
+    var iter: Iterable
+    let f: (Element) -> Bool
+    
+    init(_ iter: Iterable, _ f: @escaping (Element) -> Bool) {
+        self.iter = iter
+        self.f = f
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator(), f)
+    }
+}
+
+class TakeWhileIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = TakeWhileIterator<Iterable.Iterator>
+    
+    var iter: Iterable
+    let f: (Element) -> Bool
+    
+    init(_ iter: Iterable, _ f: @escaping (Element) -> Bool) {
+        self.iter = iter
+        self.f = f
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator(), f)
+    }
+}
+
+class DropFirstIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = DropFirstIterator<Iterable.Iterator>
+    
+    var iter: Iterable
+    let n : Int
+    
+    init(_ iter: Iterable, _ n: Int) {
+        self.iter = iter
+        self.n = n
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator(), n)
+    }
+}
+
+class DropToIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = DropToIterator<Iterable.Iterator>
+    
+    var iter: Iterable
+    let f: (Element) -> Bool
+    
+    init(_ iter: Iterable, _ f: @escaping (Element) -> Bool) {
+        self.iter = iter
+        self.f = f
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator(), f)
+    }
+}
+
+class DropWhileIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Element = Iterable.Element
+    typealias Iterator = DropWhileIterator<Iterable.Iterator>
+    
+    var iter: Iterable
+    let f: (Element) -> Bool
+    
+    init(_ iter: Iterable, _ f: @escaping (Element) -> Bool) {
+        self.iter = iter
+        self.f = f
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator(), f)
+    }
+}
+
 
 
 // Conversion from Lazy iterables to Swift Sequences, so that the for-in syntax can be used.
