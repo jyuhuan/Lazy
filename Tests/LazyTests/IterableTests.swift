@@ -407,6 +407,16 @@ class IterableTests: XCTestCase {
 
         let cs = xs.slice(from: 0, until: 4)
         XCTAssert(cs.toArray() == ["alice", "bob", "catherine", "daniel"])
+        
+        let ds = xs.slice(from: 2, to: 3)
+        XCTAssert(ds.toArray() == ["catherine", "daniel"])
+
+        let es = xs.slice(from: 2, until: 4)
+        XCTAssert(es.toArray() == ["catherine", "daniel"])
+        
+        // Corner cases
+        let fs = xs.slice(from: -3, until: 9)
+        XCTAssert(fs.toArray() == xs.toArray())
     }
     
     func testTo() {
