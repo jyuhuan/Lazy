@@ -28,6 +28,7 @@
 		96DAC1BC1F81682600C06008 /* MapProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DAC1BB1F81682600C06008 /* MapProtocol.swift */; };
 		96DAC1BE1F81683100C06008 /* SetProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DAC1BD1F81683100C06008 /* SetProtocol.swift */; };
 		96DAC1C31F81764400C06008 /* ArrayMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DAC1C21F81764400C06008 /* ArrayMap.swift */; };
+		96ED4C5A1F8A7021002DF140 /* OptionalSugars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED4C591F8A7021002DF140 /* OptionalSugars.swift */; };
 		OBJ_27 /* ArraySeqTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* ArraySeqTests.swift */; };
 		OBJ_29 /* Lazy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Lazy::Lazy::Product" /* Lazy.framework */; };
 /* End PBXBuildFile section */
@@ -64,6 +65,7 @@
 		96DAC1BB1F81682600C06008 /* MapProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapProtocol.swift; sourceTree = "<group>"; };
 		96DAC1BD1F81683100C06008 /* SetProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProtocol.swift; sourceTree = "<group>"; };
 		96DAC1C21F81764400C06008 /* ArrayMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayMap.swift; sourceTree = "<group>"; };
+		96ED4C591F8A7021002DF140 /* OptionalSugars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalSugars.swift; sourceTree = "<group>"; };
 		"Lazy::Lazy::Product" /* Lazy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Lazy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Lazy::LazyTests::Product" /* LazyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = LazyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_12 /* ArraySeqTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArraySeqTests.swift; sourceTree = "<group>"; };
@@ -143,6 +145,15 @@
 			path = Sources/Mutable;
 			sourceTree = SOURCE_ROOT;
 		};
+		96ED4C581F8A6F78002DF140 /* Sugars */ = {
+			isa = PBXGroup;
+			children = (
+				96ED4C591F8A7021002DF140 /* OptionalSugars.swift */,
+			);
+			name = Sugars;
+			path = Sources/Sugars;
+			sourceTree = SOURCE_ROOT;
+		};
 		OBJ_10 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +198,7 @@
 		OBJ_7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				96ED4C581F8A6F78002DF140 /* Sugars */,
 				96DAC1C11F8175F300C06008 /* Mutable */,
 				966754411F80204800F2DD05 /* Builders */,
 				9667543D1F801F4800F2DD05 /* Factories */,
@@ -293,6 +305,7 @@
 				966754401F801F9900F2DD05 /* Factory.swift in Sources */,
 				9667543C1F801E8A00F2DD05 /* SeqProtocol.swift in Sources */,
 				9667543B1F801E8A00F2DD05 /* RandomAccessSeqProtocol.swift in Sources */,
+				96ED4C5A1F8A7021002DF140 /* OptionalSugars.swift in Sources */,
 				96A0D30A1F82A58C0030A3C8 /* Defaultable.swift in Sources */,
 				96DAC1C31F81764400C06008 /* ArrayMap.swift in Sources */,
 				966754431F80205400F2DD05 /* Builder.swift in Sources */,

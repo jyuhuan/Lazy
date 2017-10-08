@@ -168,6 +168,10 @@ extension IterableProtocol {
         return with(element: element, insertedAt: index)
     }
     
+    func insert(element: Element, at index: Int) -> InsertedIterable<Self> {
+        return with(element: element, insertedAt: index)
+    }
+    
 }
 
 
@@ -209,12 +213,12 @@ extension IterableProtocol {
 // MARK: - Sub-iterable operations
 extension IterableProtocol {
     
-    func slice(from start: Int, until end: Int) -> RightExclusiveSliceIterable<Self> {
-        return RightExclusiveSliceIterable(self, start, end)
+    func slice(from start: Int, until end: Int) -> SliceIterable<Self> {
+        return SliceIterable(self, start, end)
     }
     
-    func slice(from start: Int, to end: Int) -> RightInclusiveSliceIterable<Self> {
-        return RightInclusiveSliceIterable(self, start, end)
+    func slice(from start: Int, to end: Int) -> SliceIterable<Self> {
+        return SliceIterable(self, start, end + 1)
     }
     
     func take(first n: Int) -> TakeFirstIterable<Self> {
@@ -531,29 +535,9 @@ class ForeIterable<Iterable: IterableProtocol>: IterableProtocol {
     }
 }
 
-
-class RightInclusiveSliceIterable<Iterable: IterableProtocol>: IterableProtocol {
+class SliceIterable<Iterable: IterableProtocol>: IterableProtocol {
     typealias Element = Iterable.Element
-    typealias Iterator = RightInclusiveSliceIterator<Iterable.Iterator>
-    
-    var iter: Iterable
-    var l: Int
-    var r: Int
-    
-    init(_ iter: Iterable, _ l: Int, _ r: Int) {
-        self.iter = iter
-        self.l = l
-        self.r = r
-    }
-    
-    func makeIterator() -> Iterator {
-        return Iterator(iter.makeIterator(), l, r)
-    }
-}
-
-class RightExclusiveSliceIterable<Iterable: IterableProtocol>: IterableProtocol {
-    typealias Element = Iterable.Element
-    typealias Iterator = RightExclusiveSliceIterator<Iterable.Iterator>
+    typealias Iterator = SliceIterator<Iterable.Iterator>
     
     var iter: Iterable
     var l: Int
@@ -728,10 +712,10 @@ class AnyIterable<I: IteratorProtocol>: IterableProtocol {
 // Operators
 infix operator ++
 infix operator ⛙
+infix operator <|>
 infix operator |>
 infix operator +|
 infix operator |+
-
 
 extension IterableProtocol {
     
@@ -743,6 +727,10 @@ extension IterableProtocol {
         return this.zipped(with: that)
     }
     
+    static func <|> <That: IterableProtocol> (this: Self, that: That) -> ZippedIterable<Self, That> {
+        return this.zipped(with: that)
+    }
+
     static func +| (element: Element, iterable: Self) -> PrependedIterable<Self> {
         return iterable.prepended(with: element)
     }

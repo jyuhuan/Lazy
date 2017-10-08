@@ -345,7 +345,9 @@ class ForeIterator<Iterator: IteratorProtocol>: IteratorProtocol {
     }
 }
 
-class RightInclusiveSliceIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+
+/// A right-inclusive slicer.
+class SliceIterator<Iterator: IteratorProtocol>: IteratorProtocol {
     typealias Element = Iterator.Element
     
     var iter: Iterator
@@ -358,52 +360,18 @@ class RightInclusiveSliceIterator<Iterator: IteratorProtocol>: IteratorProtocol 
         self.iter = iter
         self.l = l
         self.r = r
-        self.curIdx = -1
+        self.curIdx = 0
         self.isFirst = true
     }
     
     func next() -> Element? {
         if isFirst {
-            var n: Element? = nil
+            isFirst = false
             while curIdx < l {
                 curIdx += 1
-                n = iter.next()
+                iter.next()
             }
-            return n
-        }
-        else {
-            curIdx += 1
-            return curIdx < r ? iter.next() : nil
-        }
-    }
-}
-
-
-class RightExclusiveSliceIterator<Iterator: IteratorProtocol>: IteratorProtocol {
-    typealias Element = Iterator.Element
-    
-    var iter: Iterator
-    var l: Int
-    var r: Int
-    var curIdx: Int
-    var isFirst: Bool
-    
-    init(_ iter: Iterator, _ l: Int, _ r: Int) {
-        self.iter = iter
-        self.l = l
-        self.r = r
-        self.curIdx = -1
-        self.isFirst = true
-    }
-    
-    func next() -> Element? {
-        if isFirst {
-            var n: Element? = nil
-            while curIdx < l {
-                curIdx += 1
-                n = iter.next()
-            }
-            return n
+            return iter.next()
         }
         else {
             curIdx += 1

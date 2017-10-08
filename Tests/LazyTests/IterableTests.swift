@@ -226,6 +226,7 @@ class IterableTests: XCTestCase {
     }
     
     func testInsert() {
+        
         let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
         
         // A regular insert
@@ -336,7 +337,7 @@ class IterableTests: XCTestCase {
     func testTakeWhile() {
         // Test an iterable with some elements
         let xs = TestableIterable(["alice", "bob", "catherine", "daniel"])
-        XCTAssert(xs.take(while: {s in s.count >= 6}).toArray() == ["alice", "bob"])
+        XCTAssert(xs.take(while: {$0.count >= 6}).toArray() == ["alice", "bob"])
         XCTAssert(xs.take(while: {s in s.count >= 10}).toArray() == ["alice", "bob", "catherine", "daniel"])
         
         // Test an empty iterable
@@ -396,6 +397,16 @@ class IterableTests: XCTestCase {
         // Test an empty iterable
         let ys = TestableIterable<String>([])
         XCTAssert(ys.drop(until: {s in s.count >= 6}).toArray() == [])
+    }
+    
+    func testSlice() {
+        let xs = TestableIterable(["alice", "bob", "catherine", "daniel", "emily", "frank"])
+
+        let bs = xs.slice(from: 0, to: 3)
+        XCTAssert(bs.toArray() == ["alice", "bob", "catherine", "daniel"])
+
+        let cs = xs.slice(from: 0, until: 4)
+        XCTAssert(cs.toArray() == ["alice", "bob", "catherine", "daniel"])
     }
     
     func testTo() {
