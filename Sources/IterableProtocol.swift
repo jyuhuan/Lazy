@@ -712,8 +712,8 @@ class AnyIterable<I: IteratorProtocol>: IterableProtocol {
 // Operators
 infix operator ++
 infix operator ⛙
-infix operator <|>
 infix operator |>
+infix operator ><
 infix operator +|
 infix operator |+
 
@@ -724,10 +724,6 @@ extension IterableProtocol {
     }
     
     static func ⛙ <That: IterableProtocol> (this: Self, that: That) -> ZippedIterable<Self, That> {
-        return this.zipped(with: that)
-    }
-    
-    static func <|> <That: IterableProtocol> (this: Self, that: That) -> ZippedIterable<Self, That> {
         return this.zipped(with: that)
     }
 
