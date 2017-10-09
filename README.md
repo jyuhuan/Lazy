@@ -4,8 +4,25 @@
 
 
 # Lazy
-
 A library of generic lazy collections for Swift.
+
+## Progress
+This is an active project with the following milestones:
+
+### 🚲 The Essentials
+`Seq`, `Set`, `Map`
+
+### 🚗 Graph, Tree & Search
+`Graph`, `BipartiteGraph`, various types of `Tree`s.  
+An abstraction for state-space searching algorithms.
+
+### ✈️ Tables and Relations
+`Table`
+
+### 🚀 Algorithms
+Common algorithms should be implemented for the data structures, especially searching algorithms, and algorithms on graphs, trees.
+
+
 
 ## Pending Swift Issues
 - [SR-6045: AnyIterator of Never](https://bugs.swift.org/projects/SR/issues/SR-6045) affects the implementation of `DummyIterator`.
