@@ -168,10 +168,6 @@ extension IterableProtocol {
         return with(element: element, insertedAt: index)
     }
     
-    func insert(element: Element, at index: Int) -> InsertedIterable<Self> {
-        return with(element: element, insertedAt: index)
-    }
-    
 }
 
 
