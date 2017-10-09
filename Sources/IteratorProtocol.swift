@@ -520,3 +520,135 @@ class DropWhileIterator<Iterator: IteratorProtocol>: IteratorProtocol {
     }
 }
 
+
+struct RepeatedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var makeIterator: () -> Iterator
+    var curIter: Iterator
+    var n: Int
+    
+    init(_ makeIterator: @escaping () -> Iterator, _ n: Int) {
+        self.makeIterator = makeIterator
+        self.n = n
+        self.curIter = makeIterator()
+    }
+    
+    mutating func next() -> Element? {
+        if n <= 0 {
+            return nil
+        }
+        let nextOpt = curIter.next()
+        switch nextOpt {
+        case let .some(next):
+            return next
+        default:
+            n -= 1
+            if n == 0 {
+                return nil
+            }
+            curIter = makeIterator()
+            return curIter.next()
+        }
+    }
+}
+
+struct CycledIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = Iterator.Element
+    
+    var makeIterator: () -> Iterator
+    var curIter: Iterator
+    
+    init(_ makeIterator: @escaping () -> Iterator) {
+        self.makeIterator = makeIterator
+        self.curIter = makeIterator()
+    }
+    
+    mutating func next() -> Element? {
+        let nextOpt = curIter.next()
+        switch nextOpt {
+        case let .some(next):
+            return next
+        default:
+            curIter = makeIterator()
+            return curIter.next()
+        }
+    }
+}
+
+struct SlidingWindowIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = AnyIterable<RandomAccessSeqDefaultIterator<ArraySeq<Iterator.Element>>>
+
+    var iter: Iterator
+    let windowSize: Int
+    let stepSize: Int
+    
+    var window: Array<Any>
+    var isFirst: Bool
+    
+    init(_ iter: Iterator, _ windowSize: Int, _ stepSize: Int) {
+        self.iter = iter
+        self.windowSize = windowSize
+        self.stepSize = stepSize
+        
+        window = []
+        window.reserveCapacity(windowSize)
+        isFirst = true
+    }
+    
+    private func wrappedWindow() -> Element {
+        // Convert window to ArraySeq
+        let result = window.map { (x: Any) -> Iterator.Element in
+            x as! Iterator.Element
+        }
+        return AnyIterable(ArraySeq(elements: result))
+    }
+    
+    mutating func next() -> Element? {
+        if isFirst {
+            isFirst = false
+            var i = 0
+            while i < windowSize {
+                let n = iter.next()
+                if n == nil {
+                    return nil
+                }
+                window.append(n!)
+                i += 1
+            }
+            return wrappedWindow()
+        }
+        else {
+            var newWindow = Array<Any>()
+            newWindow.reserveCapacity(windowSize)
+            var i = 0
+            while i + stepSize < windowSize {
+                newWindow.append(window[i + stepSize])
+                i += 1
+            }
+            
+            var j = stepSize - windowSize
+            while j > 0 {
+                let n = iter.next()
+                if n == nil {
+                    return nil
+                }
+                j -= 1
+            }
+            
+            while i < windowSize {
+                let n = iter.next()
+                if n == nil {
+                    return nil
+                }
+                newWindow.append(n!)
+                i += 1
+            }
+            window = newWindow
+            return wrappedWindow()
+        }
+        
+        
+    }
+}
+

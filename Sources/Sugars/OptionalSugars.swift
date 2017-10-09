@@ -5,6 +5,9 @@
 //  Created by Yuhuan Jiang on 10/8/17.
 //
 
+// Swift 4 comiplier crashes on this code.
+// See [SR-6090](https://bugs.swift.org/browse/SR-6090)
+
 //extension Optional: Sequence {
 //    public func makeIterator() -> OptionalIterator<Wrapped> {
 //        return OptionalIterator(self)

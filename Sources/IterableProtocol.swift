@@ -253,6 +253,32 @@ extension IterableProtocol {
 }
 
 
+
+// MARK: - Repetitions
+extension IterableProtocol {
+    
+    func repeated(_ numTimes: Int) -> RepeatedIterable<Self> {
+        return RepeatedIterable(self, numTimes)
+    }
+    
+    var cycled: CycledIterable<Self> {
+        get {
+            return CycledIterable(self)
+        }
+    }
+    
+}
+
+
+extension IterableProtocol {
+    
+    func slidingWindows(_ windowSize: Int, _ stepSize: Int) -> SlidingWindowIterable<Self> {
+        return SlidingWindowIterable(self, windowSize, stepSize)
+    }
+    
+}
+
+
 // Conversions
 extension IterableProtocol {
     
@@ -653,6 +679,58 @@ class DropWhileIterable<Iterable: IterableProtocol>: IterableProtocol {
 }
 
 
+struct RepeatedIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Iterator = RepeatedIterator<Iterable.Iterator>
+    typealias Element = Iterable.Element
+    
+    let iter: Iterable
+    let n: Int
+    
+    init(_ iter: Iterable, _ n: Int) {
+        self.iter = iter
+        self.n = n
+    }
+    
+    func makeIterator() -> Iterator {
+        return RepeatedIterator({self.iter.makeIterator()}, n)
+    }
+}
+
+struct CycledIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Iterator = CycledIterator<Iterable.Iterator>
+    typealias Element = Iterable.Element
+    
+    let iter: Iterable
+    
+    init(_ iter: Iterable) {
+        self.iter = iter
+    }
+    
+    func makeIterator() -> Iterator {
+        return CycledIterator({self.iter.makeIterator()})
+    }
+}
+
+
+struct SlidingWindowIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Iterator = SlidingWindowIterator<Iterable.Iterator>
+    typealias Element = Iterator.Element
+
+    let iter: Iterable
+    let windowSize: Int
+    let stepSize: Int
+    
+    init(_ iter: Iterable, _ windowSize: Int, _ stepSize: Int) {
+        self.iter = iter
+        self.windowSize = windowSize
+        self.stepSize = stepSize
+    }
+    
+    func makeIterator() -> Iterator {
+        return SlidingWindowIterator(iter.makeIterator(), windowSize, stepSize)
+    }
+    
+}
 
 // Conversion from Lazy iterables to Swift Sequences, so that the for-in syntax can be used.
 
@@ -679,7 +757,7 @@ extension IterableProtocol {
     ///         print(x)
     ///     }
     ///
-    var swiftSequence: SwiftSequenceFromIterable<Self> {
+    var asSwiftSequence: SwiftSequenceFromIterable<Self> {
         get {
             return SwiftSequenceFromIterable(self)
         }

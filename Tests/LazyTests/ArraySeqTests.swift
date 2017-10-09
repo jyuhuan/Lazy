@@ -6,7 +6,7 @@ class ArraySeqTests: XCTestCase {
     func testCreateEmpty() {
         let arr = ArraySeq<String>.empty()
         assert(arr.count == 0)
-        for _ in arr.swiftSequence {
+        for _ in arr.asSwiftSequence {
             XCTAssert(false)  // Should never enter here
         }
     }
@@ -14,7 +14,7 @@ class ArraySeqTests: XCTestCase {
     func testCreateOutOfElements() {
         let arr = ArraySeq.of(elements: "a", "b")
         assert(arr.count == 2)
-        for (i, x) in arr.indexed.swiftSequence {
+        for (i, x) in arr.indexed.asSwiftSequence {
             XCTAssert(x == arr[i])
         }
     }
@@ -22,7 +22,7 @@ class ArraySeqTests: XCTestCase {
     func testCreateByFillingPlainNumbers() {
         let arr = ArraySeq.fill(5, 8)
         assert(arr.count == 5)
-        for x in arr.swiftSequence {
+        for x in arr.asSwiftSequence {
             XCTAssert(x == 8)
         }
     }
@@ -36,7 +36,7 @@ class ArraySeqTests: XCTestCase {
             return i
         }
         let arr = ArraySeq.fill(5, newNumber())
-        for (i, x) in arr.indexed.swiftSequence {
+        for (i, x) in arr.indexed.asSwiftSequence {
             XCTAssert(x == i)
         }
     }
@@ -44,7 +44,7 @@ class ArraySeqTests: XCTestCase {
     func testCreateByTabulating() {
         let arr = ArraySeq.tabulate(5){i in return i * 10}
         assert(arr.count == 5)
-        for (i, x) in arr.indexed.swiftSequence {
+        for (i, x) in arr.indexed.asSwiftSequence {
             XCTAssert(x == i * 10)
         }
     }
@@ -52,7 +52,7 @@ class ArraySeqTests: XCTestCase {
     func testIndexed() {
         let arr = ["alice", "bob", "catherine", "daniel", "emily"]
         let xs = ArraySeq<String>(elements: arr)
-        for (i, x) in xs.indexed.swiftSequence {
+        for (i, x) in xs.indexed.asSwiftSequence {
             XCTAssert(arr[i] == x)
         }
     }

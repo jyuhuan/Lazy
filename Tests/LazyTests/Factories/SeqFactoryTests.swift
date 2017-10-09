@@ -24,7 +24,7 @@ class SeqFactoryTests: XCTestCase {
     func testTabulate() {
         let arr = ArraySeq.tabulate(5){i in return i * 10}
         assert(arr.count == 5)
-        for (i, x) in arr.indexed.swiftSequence {
+        for (i, x) in arr.indexed.asSwiftSequence {
             XCTAssert(x == i * 10)
         }
     }

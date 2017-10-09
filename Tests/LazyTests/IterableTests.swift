@@ -115,7 +115,7 @@ class IterableTests: XCTestCase {
     func testIndexed() {
         let arr = ["alice", "bob", "catherine", "daniel"]
         let xs = TestableIterable(arr)
-        for (i, x) in xs.indexed.swiftSequence {
+        for (i, x) in xs.indexed.asSwiftSequence {
             XCTAssert(arr[i] == x)
         }
     }
@@ -127,19 +127,19 @@ class IterableTests: XCTestCase {
         let ys = TestableIterable(yArr)
         
         let bs = xs.zipped(with: ys)
-        for (i, (x, y)) in bs.indexed.swiftSequence {
+        for (i, (x, y)) in bs.indexed.asSwiftSequence {
             XCTAssert(xArr[i] == x)
             XCTAssert(yArr[i] == y)
         }
         
         let cs = xs.zip(ys)
-        for (i, (x, y)) in cs.indexed.swiftSequence {
+        for (i, (x, y)) in cs.indexed.asSwiftSequence {
             XCTAssert(xArr[i] == x)
             XCTAssert(yArr[i] == y)
         }
         
         let ds = xs ⛙ ys
-        for (i, (x, y)) in ds.indexed.swiftSequence {
+        for (i, (x, y)) in ds.indexed.asSwiftSequence {
             XCTAssert(xArr[i] == x)
             XCTAssert(yArr[i] == y)
         }
@@ -153,14 +153,14 @@ class IterableTests: XCTestCase {
         
         let cs = xs ⛙ ys
         XCTAssert(cs.size == 3)
-        for (i, (x, y)) in cs.indexed.swiftSequence {
+        for (i, (x, y)) in cs.indexed.asSwiftSequence {
             XCTAssert(xArr[i] == x)
             XCTAssert(yArr[i] == y)
         }
         
         let ds = ys ⛙ xs
         XCTAssert(cs.size == 3)
-        for (i, (y, x)) in ds.indexed.swiftSequence {
+        for (i, (y, x)) in ds.indexed.asSwiftSequence {
             XCTAssert(yArr[i] == y)
             XCTAssert(xArr[i] == x)
         }
@@ -419,6 +419,90 @@ class IterableTests: XCTestCase {
         XCTAssert(fs.toArray() == xs.toArray())
     }
     
+    
+    func testRepeated() {
+        let xs = TestableIterable(["alice", "bob", "catherine"])
+        
+        let ys = xs.repeated(3)
+        XCTAssert(ys.toArray() == [
+            "alice", "bob", "catherine",
+            "alice", "bob", "catherine",
+            "alice", "bob", "catherine"
+        ])
+        
+        let zs = xs.repeated(0)
+        XCTAssert(zs.toArray() == [])
+    }
+    
+    /// - TODO: How to make this test more valid?
+    func testCycled() {
+        let xArr = ["alice", "bob", "catherine"]
+        let xs = TestableIterable(xArr)
+        let ys = xs.cycled.take(first: 30)
+        for (i, y) in ys.indexed.asSwiftSequence {
+            XCTAssert(y == xArr[i % 3])
+        }
+    }
+    
+    
+    func testSlidingWindow() {
+        let xs = TestableIterable([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+        func normalCase() {
+            let ys = xs.slidingWindows(3, 1)
+            XCTAssert(ys.size == 9)
+            let yArr = ys.toArray()
+            XCTAssert(yArr[0].toArray() == [0, 1, 2])
+            XCTAssert(yArr[1].toArray() == [1, 2, 3])
+            XCTAssert(yArr[2].toArray() == [2, 3, 4])
+            XCTAssert(yArr[3].toArray() == [3, 4, 5])
+            XCTAssert(yArr[4].toArray() == [4, 5, 6])
+            XCTAssert(yArr[5].toArray() == [5, 6, 7])
+            XCTAssert(yArr[6].toArray() == [6, 7, 8])
+            XCTAssert(yArr[7].toArray() == [7, 8, 9])
+            XCTAssert(yArr[8].toArray() == [8, 9, 10])
+        }
+        
+        func normalCaseStepSize2() {
+            let ys = xs.slidingWindows(3, 2)
+            XCTAssert(ys.size == 5)
+            let yArr = ys.toArray()
+            XCTAssert(yArr[0].toArray() == [0, 1, 2])
+            XCTAssert(yArr[1].toArray() == [2, 3, 4])
+            XCTAssert(yArr[2].toArray() == [4, 5, 6])
+            XCTAssert(yArr[3].toArray() == [6, 7, 8])
+            XCTAssert(yArr[4].toArray() == [8, 9, 10])
+        }
+
+        func emptyOriginalIterable() {
+            let empty = TestableIterable([])
+            let ys = empty.slidingWindows(3, 1)
+            XCTAssert(ys.size == 0)
+            for _ in ys.asSwiftSequence {
+                // Should not enter here
+                XCTAssert(false)
+            }
+        }
+        
+        func windowSizeSameAsOriginalIterable() {
+            let ys = xs.slidingWindows(xs.size, 2)
+            XCTAssert(ys.size == 1)
+            XCTAssert(ys.toArray()[0].toArray() == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        }
+        
+        func windowSizeLargerThanOriginalIterable() {
+            let ys = xs.slidingWindows(xs.size + 3, 1)
+            XCTAssert(ys.size == 0)
+            
+        }
+        
+        normalCase()
+        normalCaseStepSize2()
+        emptyOriginalIterable()
+        windowSizeSameAsOriginalIterable()
+        windowSizeLargerThanOriginalIterable()
+    }
+
     func testTo() {
         let xs: TestableIterable<String> = TestableIterable(["alice", "bob", "catherine", "daniel"])
         let arr: ArraySeq<String> = xs.to(ArraySeq.newBuilder())
