@@ -6,10 +6,10 @@
 # Lazy
 A library of generic lazy collections for Swift.
 
-## Progress
+## Milestones
 This is an active project with the following milestones:
 
-### 🚲 The Essentials
+### 🚲 The Essentials <sup style="font-variant: small-caps;">current</sup>
 `Seq`, `Set`, `Map`
 
 ### 🚗 Graph, Tree & Search
