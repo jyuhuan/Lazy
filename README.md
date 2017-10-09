@@ -7,6 +7,10 @@
 
 A library of generic lazy collections for Swift.
 
+## Pending Swift Issues
+- [SR-6045: AnyIterator of Never](https://bugs.swift.org/projects/SR/issues/SR-6045) affects the implementation of `DummyIterator`.
+- [SR-6090: Extension of the Optional enum](https://bugs.swift.org/projects/SR/issues/SR-6090) affects the implementation of monadic syntactic sugars for optinals.
+
 ## Acknowledgement
 
 Lazy is based largely on [poly-collection](https://github.com/ctongfei/poly-collection).
