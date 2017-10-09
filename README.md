@@ -9,17 +9,17 @@ A library of generic lazy collections for Swift.
 ## Milestones
 This is an active project with the following milestones:
 
-### The Essentials <sup>current</sup>
+### <sup>current</sup> The Essentials  🚲
 `Seq`, `Set`, `Map`
 
-### Graph, Tree & Search
+### Graph, Tree & Search 🚗
 `Graph`, `BipartiteGraph`, various types of `Tree`s.  
 An abstraction for state-space searching algorithms.
 
-### Tables and Relations
+### Tables and Relations ✈️
 `Table`
 
-### Algorithms
+### Algorithms 🚀
 Common algorithms should be implemented for the data structures, especially searching algorithms, and algorithms on graphs, trees.
 
 
