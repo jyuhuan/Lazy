@@ -369,7 +369,7 @@ class SliceIterator<Iterator: IteratorProtocol>: IteratorProtocol {
             isFirst = false
             while curIdx < l {
                 curIdx += 1
-                iter.next()
+                let _ = iter.next()
             }
             return iter.next()
         }
@@ -652,3 +652,148 @@ struct SlidingWindowIterator<Iterator: IteratorProtocol>: IteratorProtocol {
     }
 }
 
+/// Ported from Scala's GroupedIterator
+struct GroupedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
+    typealias Element = AnyIterable<RandomAccessSeqDefaultIterator<ArraySeq<Iterator.Element>>>
+    
+    typealias T = Iterator.Element
+    
+    var iter: NonProactiveIterator<Iterator>
+    var buffer: Array<T>
+    let size: Int
+    let step: Int
+    var filled: Bool
+    let partial: Bool
+    let pad: Optional<() -> T>
+    
+    init(_ iter: Iterator, _ size: Int, _ step: Int) {
+        self.iter = NonProactiveIterator(iter)
+        self.buffer = Array<T>()
+        self.size = size
+        self.step = step
+        self.filled = false
+        self.partial = true
+        self.pad = nil
+    }
+    
+    private mutating func takeDestructively(_ size: Int) -> Array<T> {
+        var buf = Array<T>()
+        var i = 0
+        while i < size && iter.hasNext {
+            buf.append(iter.next())
+            i += 1
+        }
+        return buf
+    }
+    
+    private func padding(_ n: Int) -> Array<T> {
+        var res = Array<T>()
+        res.reserveCapacity(n)
+        var i = 0
+        while i < n {
+            res.append(pad!())
+            i += 1
+        }
+        return res
+    }
+    
+    private func gap() -> Int {
+        return max(step - size, 0)
+    }
+    
+    private mutating func go(_ count: Int) -> Bool {
+        let prevSize = buffer.count
+        func isFirst() -> Bool { return self.buffer.count == 0 }
+        
+        let xs: Array<T>;
+        let res = takeDestructively(count)
+        let shortBy = count - res.count
+        if shortBy > 0 && pad != nil {
+            xs = res + padding(shortBy)
+        }
+        else {
+            xs = res
+        }
+        
+        let len = xs.count
+        let incomplete = len < count
+        
+        func deliver(_ howMany: Int) -> Bool {
+            if howMany <= 0 {
+                return false
+            }
+            if !(isFirst() || len > gap()) {
+                return false
+            }
+            
+            if !isFirst() {
+                var numToRemove = min(step, prevSize)
+                while numToRemove > 0 {
+                    buffer.remove(at: 0)
+                    numToRemove -= 1
+                }
+            }
+            
+            let available = isFirst() ? len : min(howMany, len - gap())
+            
+            buffer.append(contentsOf: xs.suffix(available))
+            filled = true
+            return true
+        }
+        
+        if xs.isEmpty {
+            return false
+        }
+        
+        if partial {
+            return deliver(min(len, size))
+        }
+        
+        if incomplete {
+            return false
+        }
+        
+        if isFirst() {
+            return deliver(len)
+        }
+        
+        return deliver(min(step, size))
+    }
+    
+    mutating func fill() -> Bool {
+        if !iter.hasNext {
+            return false
+        }
+        else if buffer.isEmpty {
+            return go(size)
+        }
+        else {
+            return go(step)
+        }
+    }
+    
+    mutating func _hasNext() -> Bool {
+        return filled || fill()
+    }
+    
+    mutating func _next() -> Element {
+        if !filled {
+            let _ = fill()
+        }
+        if !filled {
+            fatalError()
+        }
+        filled = false
+        return AnyIterable(ArraySeq(elements: buffer))
+    }
+    
+    mutating func next() -> Element? {
+        if _hasNext() {
+            return _next()
+        }
+        else {
+            return nil
+        }
+    }
+    
+}

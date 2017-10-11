@@ -276,6 +276,14 @@ extension IterableProtocol {
         return SlidingWindowIterable(self, windowSize, stepSize)
     }
     
+    func inclusiveSlidingWindows(_ windowSize: Int, _ stepSize: Int) -> GroupedIterable<Self> {
+        return GroupedIterable(self, windowSize, stepSize)
+    }
+    
+    func grouped(_ groupSize: Int) -> GroupedIterable<Self> {
+        return GroupedIterable(self, groupSize, groupSize)
+    }
+    
 }
 
 
@@ -729,11 +737,28 @@ struct SlidingWindowIterable<Iterable: IterableProtocol>: IterableProtocol {
     func makeIterator() -> Iterator {
         return SlidingWindowIterator(iter.makeIterator(), windowSize, stepSize)
     }
-    
 }
 
-// Conversion from Lazy iterables to Swift Sequences, so that the for-in syntax can be used.
+struct GroupedIterable<Iterable: IterableProtocol>: IterableProtocol {
+    typealias Iterator = GroupedIterator<Iterable.Iterator>
+    typealias Element = Iterator.Element
+    
+    let iter: Iterable
+    let windowSize: Int
+    let stepSize: Int
+    
+    init(_ iter: Iterable, _ windowSize: Int, _ stepSize: Int) {
+        self.iter = iter
+        self.windowSize = windowSize
+        self.stepSize = stepSize
+    }
+    
+    func makeIterator() -> Iterator {
+        return GroupedIterator(iter.makeIterator(), windowSize, stepSize)
+    }
+}
 
+/// Conversion from Lazy iterables to Swift Sequences, so that the for-in syntax can be used.
 class SwiftSequenceFromIterable<Iterable: IterableProtocol>: Sequence {
     typealias Element = Iterable.Element
     typealias Iterator = Iterable.Iterator

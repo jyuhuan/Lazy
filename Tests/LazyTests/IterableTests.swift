@@ -502,6 +502,55 @@ class IterableTests: XCTestCase {
         windowSizeSameAsOriginalIterable()
         windowSizeLargerThanOriginalIterable()
     }
+    
+    func testInclusiveSlidingWindows() {
+        let xArr = ["a", "b", "c", "d", "e", "f"]
+        let xs = TestableIterable(xArr)
+        
+        func normalCase() {
+            let ys = xs.inclusiveSlidingWindows(4, 1)
+            let yArr = ys.toArray()
+            XCTAssert(yArr.count == 3)
+            XCTAssert(yArr[0].toArray() == ["a", "b", "c", "d"])
+            XCTAssert(yArr[1].toArray() == ["b", "c", "d", "e"])
+            XCTAssert(yArr[2].toArray() == ["c", "d", "e", "f"])
+        }
+        
+        func normalCaseStep2() {
+            let ys = xs.inclusiveSlidingWindows(3, 2)
+            let yArr = ys.toArray()
+            XCTAssert(yArr.count == 3)
+            XCTAssert(yArr[0].toArray() == ["a", "b", "c"])
+            XCTAssert(yArr[1].toArray() == ["c", "d", "e"])
+            XCTAssert(yArr[2].toArray() == ["e", "f"])
+        }
+        
+        func windowSizeSameAsOriginalIterable() {
+            let ys = xs.inclusiveSlidingWindows(6, 1)
+            let yArr = ys.toArray()
+            XCTAssert(yArr.count == 1)
+            XCTAssert(yArr[0].toArray() == xArr)
+        }
+        
+        func windowSizeIsLargerThanOriginalIterable() {
+            let ys = xs.inclusiveSlidingWindows(7, 1)
+            let yArr = ys.toArray()
+            XCTAssert(yArr.count == 1)
+            XCTAssert(yArr[0].toArray() == xArr)
+        }
+        
+        normalCase()
+        normalCaseStep2()
+        windowSizeSameAsOriginalIterable()
+        windowSizeIsLargerThanOriginalIterable()
+        
+        
+        
+    }
+    
+    func testGrouped() {
+        
+    }
 
     func testTo() {
         let xs: TestableIterable<String> = TestableIterable(["alice", "bob", "catherine", "daniel"])
