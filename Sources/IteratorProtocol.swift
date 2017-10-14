@@ -797,3 +797,54 @@ struct GroupedIterator<Iterator: IteratorProtocol>: IteratorProtocol {
     }
     
 }
+
+struct SlidingPairsIterator<Iterator: IteratorProtocol, NewElement>: IteratorProtocol {
+    typealias Element = NewElement
+    
+    var iter: Iterator
+    let f: (Iterator.Element, Iterator.Element) -> NewElement
+    
+    var a: Iterator.Element?
+    var b: Iterator.Element?
+    
+    var notComplete: Bool
+    
+    init(_ iter: Iterator, _ f: @escaping (Iterator.Element, Iterator.Element) -> NewElement) {
+        self.iter = iter
+        self.f = f
+        
+        let next = self.iter.next()
+        notComplete = next != nil
+        a = nil
+        b = notComplete ? next : nil
+    }
+    
+    mutating func next() -> Element? {
+        a = b
+        let next = iter.next()
+        notComplete = next != nil
+        if notComplete {
+            b = next
+            return f(a!, b!)
+        }
+        else {
+            return nil
+        }
+    }
+}
+
+struct SlidingTriplesIterator<Iterator: IteratorProtocol, NewElement>: IteratorProtocol {
+    typealias Element = (Iterator.Element, Iterator.Element, Iterator.Element)
+    
+    var iter: Iterator
+    let f: (Element) -> NewElement
+    
+    init(_ iter: Iterator, _ f: @escaping (Element) -> NewElement) {
+        self.iter = iter
+        self.f = f
+    }
+    
+    mutating func next() -> Element? {
+        fatalError()
+    }
+}

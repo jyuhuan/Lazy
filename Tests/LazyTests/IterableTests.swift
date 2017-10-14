@@ -551,6 +551,87 @@ class IterableTests: XCTestCase {
     func testGrouped() {
         
     }
+    
+    func testSlidingPairs() {
+        func regularCase() {
+            let xs = TestableIterable(["a", "b", "c", "d"])
+            let pairs = xs.slidingPairs
+            XCTAssert(pairs.size == 3)
+            let pairArr = pairs.toArray()
+            XCTAssert(pairArr[0] == ("a", "b"))
+            XCTAssert(pairArr[1] == ("b", "c"))
+            XCTAssert(pairArr[2] == ("c", "d"))
+        }
+        regularCase()
+
+        
+        func onlyOneElement() {
+            let xs = TestableIterable(["a"])
+            let pairs = xs.slidingPairs
+            XCTAssert(pairs.size == 0)
+            for _ in pairs.asSwiftSequence {
+                XCTAssert(false)
+            }
+        }
+        onlyOneElement()
+
+        func zeroElements() {
+            let xs = TestableIterable([])
+            let pairs = xs.slidingPairs
+            XCTAssert(pairs.size == 0)
+            for _ in pairs.asSwiftSequence {
+                XCTAssert(false)
+            }
+        }
+        zeroElements()
+    }
+    
+    func testSlidingPairsWith() {
+        func regularCase() {
+            let xs = TestableIterable(["a", "b", "c", "d"])
+            let pairs = xs.slidingPairs(with: {"\($0)-\($1)"})
+            XCTAssert(pairs.size == 3)
+            let pairArr = pairs.toArray()
+            XCTAssert(pairArr[0] == "a-b")
+            XCTAssert(pairArr[1] == "b-c")
+            XCTAssert(pairArr[2] == "c-d")
+        }
+        regularCase()
+        
+        
+        func onlyOneElement() {
+            let xs = TestableIterable(["a"])
+            let pairs = xs.slidingPairs(with: {"\($0)-\($1)"})
+            XCTAssert(pairs.size == 0)
+            for _ in pairs.asSwiftSequence {
+                XCTAssert(false)
+            }
+        }
+        onlyOneElement()
+        
+        func zeroElements() {
+            let xs = TestableIterable([])
+            let pairs = xs.slidingPairs(with: {"\($0)-\($1)"})
+            XCTAssert(pairs.size == 0)
+            for _ in pairs.asSwiftSequence {
+                XCTAssert(false)
+            }
+        }
+        zeroElements()
+    }
+    
+    func testSlidingTriples() {
+        
+    }
+    
+    func testPairChunks() {
+        
+    }
+    
+    func testTripleChunks() {
+        
+    }
+    
 
     func testTo() {
         let xs: TestableIterable<String> = TestableIterable(["alice", "bob", "catherine", "daniel"])

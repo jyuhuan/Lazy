@@ -280,6 +280,26 @@ extension IterableProtocol {
         return GroupedIterable(self, windowSize, stepSize)
     }
     
+    func slidingPairs<NewElement>(with f: @escaping (Element, Element) -> NewElement) -> SlidingPairsIterable<Self, NewElement> {
+        return SlidingPairsIterable(self, f)
+    }
+    
+    var slidingPairs: SlidingPairsIterable<Self, (Element, Element)> {
+        get {
+            return SlidingPairsIterable(self){ ($0, $1) }
+        }
+    }
+    
+    func slidingTriples<NewElement>(with f: @escaping (Element, Element, Element) -> NewElement) -> SlidingTriplesIterable<Self, NewElement> {
+        return SlidingTriplesIterable(self, f)
+    }
+    
+    var slidingTriples: SlidingTriplesIterable<Self, (Element, Element, Element)> {
+        get {
+            return SlidingTriplesIterable(self){ $0 }
+        }
+    }
+    
     func grouped(_ groupSize: Int) -> GroupedIterable<Self> {
         return GroupedIterable(self, groupSize, groupSize)
     }
@@ -757,6 +777,42 @@ struct GroupedIterable<Iterable: IterableProtocol>: IterableProtocol {
         return GroupedIterator(iter.makeIterator(), windowSize, stepSize)
     }
 }
+
+
+struct SlidingPairsIterable<Iterable: IterableProtocol, NewElement>: IterableProtocol {
+    typealias Iterator = SlidingPairsIterator<Iterable.Iterator, NewElement>
+    typealias Element = NewElement
+    
+    let iter: Iterable
+    let f: (Iterable.Element, Iterable.Element) -> NewElement
+    
+    init(_ iter: Iterable, _ f: @escaping (Iterable.Element, Iterable.Element) -> NewElement) {
+        self.iter = iter
+        self.f = f
+    }
+    
+    func makeIterator() -> Iterator {
+        return SlidingPairsIterator<Iterable.Iterator, NewElement>(iter.makeIterator(), f)
+    }
+}
+
+struct SlidingTriplesIterable<Iterable: IterableProtocol, NewElement>: IterableProtocol {
+    typealias Iterator = SlidingTriplesIterator<Iterable.Iterator, NewElement>
+    typealias Element = Iterator.Element
+    
+    let iter: Iterable
+    let f: (Element) -> NewElement
+    
+    init(_ iter: Iterable, _ f: @escaping (Element) -> NewElement) {
+        self.iter = iter
+        self.f = f
+    }
+    
+    func makeIterator() -> Iterator {
+        return Iterator(iter.makeIterator(), f)
+    }
+}
+
 
 /// Conversion from Lazy iterables to Swift Sequences, so that the for-in syntax can be used.
 class SwiftSequenceFromIterable<Iterable: IterableProtocol>: Sequence {
